@@ -10,20 +10,29 @@ import {
 
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
-import { MEALS } from "../data/dummy-data";
 import List from "../components/MealDetail/List";
+import IconButton from "../components/IconButton";
+import { MEALS } from "../data/dummy-data";
 
 function MealDetailsScreen({ route, navigation }) {
   const mealId = route.params.mealId;
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  function headerButtonPressHandler() {}
+  function headerButtonPressHandler() {
+    console.log("Favorite meal!");
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <Button title="Tap me!" onPress={headerButtonPressHandler} />;
+        return (
+          <IconButton
+            icon="star"
+            color="white"
+            onPress={headerButtonPressHandler}
+          />
+        );
       },
     });
   }, [navigation, headerButtonPressHandler]);
