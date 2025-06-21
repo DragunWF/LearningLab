@@ -5,7 +5,7 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { MEALS, CATEGORIES } from "../data/dummy-data";
 import MealItem from "../components/MealItem";
 
-function MealsOverViewScreen({ route, navigation }) {
+function MealsOverviewScreen({ route, navigation }) {
   const categoryId = route.params.categoryId;
 
   const displayedMeals = MEALS.filter((mealItem) => {
@@ -21,6 +21,12 @@ function MealsOverViewScreen({ route, navigation }) {
   }, [categoryId, navigation]);
 
   function renderMealItem(itemData) {
+    function pressHandler() {
+      navigation.navigate("MealDetails", {
+        mealId: itemData.item.id,
+      });
+    }
+
     const item = itemData.item;
     const mealItemProps = {
       title: item.title,
@@ -29,7 +35,7 @@ function MealsOverViewScreen({ route, navigation }) {
       affordability: item.affordability,
       complexity: item.complexity,
     };
-    return <MealItem {...mealItemProps} />;
+    return <MealItem {...mealItemProps} onPress={pressHandler} />;
   }
 
   return (
@@ -50,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MealsOverViewScreen;
+export default MealsOverviewScreen;
