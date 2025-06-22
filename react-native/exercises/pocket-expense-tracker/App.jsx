@@ -30,7 +30,7 @@ export default function App() {
             name="AllExpenses"
             component={AllExpensesScreen}
             options={{
-              headertitle: "All Expenses",
+              headerTitle: "All Expenses",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="calendar" color={color} size={size} />
               ),

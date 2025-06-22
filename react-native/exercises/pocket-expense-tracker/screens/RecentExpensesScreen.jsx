@@ -1,6 +1,27 @@
+import { useLayoutEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
+import IconButton from "../components/IconButton";
 
-function RecentExpensesScreen() {
+function RecentExpensesScreen({ navigation }) {
+  useLayoutEffect(() => {
+    function addExpenseHandler() {
+      console.log("Add Expense Button Pressed");
+    }
+
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <IconButton
+            name="add"
+            color="black"
+            onPress={addExpenseHandler}
+            style={styles.navHeaderButton}
+          />
+        );
+      },
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -21,6 +42,9 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginTop: 20,
+  },
+  navHeaderButton: {
+    marginRight: 20,
   },
   expensesContainer: {},
 });
