@@ -1,13 +1,13 @@
 import { StyleSheet, View, Text } from "react-native";
 
-function AllExpensesScreen() {
+function ExpenseCard() {
   return (
     <View>
-      <Text>AllExpensesScreen</Text>
+      <Text>ExpenseCard</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({});
 
-export default AllExpensesScreen;
+export default ExpenseCard;

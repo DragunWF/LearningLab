@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
+
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
 import AllExpensesScreen from "./screens/AllExpensesScreen";
 
@@ -16,8 +18,25 @@ export default function App() {
           <BottomTab.Screen
             name="RecentExpenses"
             component={RecentExpensesScreen}
+            options={{
+              headerTitle: "Recent Expenses",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="time" color={color} size={size} />
+              ),
+              tabBarLabel: "Recent Expenses",
+            }}
           />
-          <BottomTab.Screen name="AllExpenses" component={AllExpensesScreen} />
+          <BottomTab.Screen
+            name="AllExpenses"
+            component={AllExpensesScreen}
+            options={{
+              headertitle: "All Expenses",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="calendar" color={color} size={size} />
+              ),
+              tabBarLabel: "All Expenses",
+            }}
+          />
         </BottomTab.Navigator>
       </NavigationContainer>
     </>
