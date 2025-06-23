@@ -2,17 +2,17 @@ import { StyleSheet, View, Text, Pressable } from "react-native";
 
 import Card from "./Card";
 
-function ExpenseCard({ onEdit }) {
+function ExpenseCard({ name, date, expense, onEdit }) {
   return (
     <Card style={styles.cardContainer}>
       <View style={styles.cardInfoContainer}>
-        <Text style={styles.text}>Expense Title</Text>
-        <Text style={styles.text}>Date</Text>
+        <Text style={styles.text}>{name}</Text>
+        <Text style={styles.text}>{date}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Pressable onPress={onEdit}>
           <View>
-            <Text style={styles.text}>₱ 0.00</Text>
+            <Text style={styles.text}>₱ {expense}</Text>
           </View>
         </Pressable>
       </View>

@@ -31,7 +31,7 @@ function RecentExpensesScreen({ navigation }) {
       <View style={styles.container}>
         <ExpenseSummaryCard subHeaderText="Last 7 Days" totalText="₱ 0.00" />
         <View style={styles.expensesContainer}>
-          <ExpenseCard />
+          <ExpenseCard name="Name" date="Date" expense="1.00" />
         </View>
       </View>
     </LinearGradient>
