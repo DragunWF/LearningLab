@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import ExpenseSummaryCard from "../components/TitleCard";
 import IconButton from "../components/IconButton";
+import ExpenseCard from "../components/ExpenseCard";
 
 function RecentExpensesScreen({ navigation }) {
   useLayoutEffect(() => {
@@ -30,7 +31,7 @@ function RecentExpensesScreen({ navigation }) {
       <View style={styles.container}>
         <ExpenseSummaryCard subHeaderText="Last 7 Days" totalText="₱ 0.00" />
         <View style={styles.expensesContainer}>
-          <Text>Expense List</Text>
+          <ExpenseCard />
         </View>
       </View>
     </LinearGradient>
@@ -49,7 +50,9 @@ const styles = StyleSheet.create({
   navHeaderButton: {
     marginRight: 20,
   },
-  expensesContainer: {},
+  expensesContainer: {
+    marginTop: 20,
+  },
 });
 
 export default RecentExpensesScreen;

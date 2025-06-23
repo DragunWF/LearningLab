@@ -14,7 +14,13 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <NavigationContainer>
-        <BottomTab.Navigator>
+        <BottomTab.Navigator
+          screenOptions={{
+            tabBarStyle: {
+              backgroundColor: "#021526",
+            },
+          }}
+        >
           <BottomTab.Screen
             name="RecentExpenses"
             component={RecentExpensesScreen}
@@ -24,6 +30,10 @@ export default function App() {
                 <Ionicons name="time" color={color} size={size} />
               ),
               tabBarLabel: "Recent Expenses",
+              headerTintColor: "white",
+              headerStyle: {
+                backgroundColor: "#021526",
+              },
             }}
           />
           <BottomTab.Screen
@@ -35,6 +45,10 @@ export default function App() {
                 <Ionicons name="calendar" color={color} size={size} />
               ),
               tabBarLabel: "All Expenses",
+              headerTintColor: "white",
+              headerStyle: {
+                backgroundColor: "#021526",
+              },
             }}
           />
         </BottomTab.Navigator>
