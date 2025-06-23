@@ -1,5 +1,7 @@
 import { useLayoutEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
+
+import ExpenseSummaryCard from "../components/TitleCard";
 import IconButton from "../components/IconButton";
 
 function RecentExpensesScreen({ navigation }) {
@@ -24,9 +26,7 @@ function RecentExpensesScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text>Recent Expenses Screen</Text>
-      </View>
+      <ExpenseSummaryCard subHeaderText="Last 7 Days" totalText="₱ 0.00" />
       <View style={styles.expensesContainer}>
         <Text>Expense List</Text>
       </View>
@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-  },
-  headerContainer: {
-    marginTop: 20,
   },
   navHeaderButton: {
     marginRight: 20,

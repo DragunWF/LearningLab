@@ -1,11 +1,11 @@
 import { StyleSheet, View, Text } from "react-native";
 
+import ExpenseSummaryCard from "../components/TitleCard";
+
 function AllExpensesScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text>All Expenses</Text>
-      </View>
+      <ExpenseSummaryCard subHeaderText="Total" totalText="₱ 0.00" />
       <View style={styles.expensesContainer}>
         <Text>Expense List</Text>
       </View>
