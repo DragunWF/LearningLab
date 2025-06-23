@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import ExpenseCard from "./ExpenseCard";
 
 function ExpenseList({ data }) {
@@ -13,15 +13,22 @@ function ExpenseList({ data }) {
   }
 
   return (
-    <FlatList
-      data={data}
-      renderItem={renderExpenseItem}
-      keyExtractor={(item) => item.id}
-      alwaysBounceVertical={false}
-    />
+    <View style={styles.listContainer}>
+      <FlatList
+        data={data}
+        renderItem={renderExpenseItem}
+        keyExtractor={(item) => item.id}
+        alwaysBounceVertical={false}
+      />
+    </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  listContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ExpenseList;

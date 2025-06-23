@@ -1,12 +1,15 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import ExpenseSummaryCard from "../components/TitleCard";
 import IconButton from "../components/IconButton";
-import ExpenseCard from "../components/ExpenseCard";
+import ExpenseList from "../components/ExpenseList";
+import { ExpensesContext } from "../store/ExpensesContext";
 
 function RecentExpensesScreen({ navigation }) {
+  const expensesContext = useContext(ExpensesContext);
+
   useLayoutEffect(() => {
     function addExpenseHandler() {
       console.log("Add Expense Button Pressed");
@@ -31,7 +34,7 @@ function RecentExpensesScreen({ navigation }) {
       <View style={styles.container}>
         <ExpenseSummaryCard subHeaderText="Last 7 Days" totalText="₱ 0.00" />
         <View style={styles.expensesContainer}>
-          <ExpenseCard name="Name" date="Date" expense="1.00" />
+          <ExpenseList data={expensesContext.expenses} />
         </View>
       </View>
     </LinearGradient>
@@ -52,6 +55,9 @@ const styles = StyleSheet.create({
   },
   expensesContainer: {
     marginTop: 20,
+    paddingBottom: 100,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

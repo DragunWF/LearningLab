@@ -6,7 +6,6 @@ function Card({ children, style }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: "75%",
     backgroundColor: "#021526",
     borderRadius: 10,
     borderWidth: 1,

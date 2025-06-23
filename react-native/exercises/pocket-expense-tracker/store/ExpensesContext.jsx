@@ -1,14 +1,16 @@
 import { createContext, useState } from "react";
 
+import { EXPENSES } from "../data/dummyData";
+
 export const ExpensesContext = createContext({
-  ids: [],
+  expenses: [...EXPENSES],
   addExpense: (id) => {},
   deleteExpense: (id) => {},
   updateExpense: (id) => {},
 });
 
 function ExpensesContextProvider({ children }) {
-  const [expenseIds, setExpenseIds] = useState([]);
+  const [expenses, setExpense] = useState([...EXPENSES]);
 
   function addExpense(id) {}
 
@@ -17,7 +19,7 @@ function ExpensesContextProvider({ children }) {
   function updateExpense(id) {}
 
   const value = {
-    ids: expenseIds,
+    expenses: expenses,
     addExpense: addExpense,
     deleteExpense: deleteExpense,
     updateExpense: updateExpense,

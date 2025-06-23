@@ -1,8 +1,10 @@
 class Expense {
-  constructor(id, title, expense, date) {
+  constructor(id, name, expense, date) {
     this.id = id;
-    this.title = title;
+    this.name = name;
     this.expense = expense;
     this.date = date;
   }
 }
+
+export default Expense;

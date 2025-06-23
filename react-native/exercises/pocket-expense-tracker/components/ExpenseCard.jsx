@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 10,
+    width: 325,
   },
   cardInfoContainer: {
     gap: 3,

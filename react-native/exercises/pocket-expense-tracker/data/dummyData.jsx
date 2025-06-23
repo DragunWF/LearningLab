@@ -1,1 +1,29 @@
-export const EXPENSES = [];
+import Expense from "../models/expense";
+
+export const EXPENSES = [
+  new Expense(1, "Grocery Shopping", 127.5, "2024-06-20"),
+  new Expense(2, "Gas Station", 45.0, "2024-06-19"),
+  new Expense(3, "Netflix Subscription", 15.99, "2024-06-18"),
+  new Expense(4, "Coffee Shop", 8.75, "2024-06-18"),
+  new Expense(5, "Phone Bill", 89.99, "2024-06-17"),
+  new Expense(6, "Restaurant Dinner", 62.3, "2024-06-16"),
+  new Expense(7, "Uber Ride", 18.5, "2024-06-15"),
+  new Expense(8, "Bookstore", 34.99, "2024-06-14"),
+  new Expense(9, "Gym Membership", 49.99, "2024-06-13"),
+  new Expense(10, "Online Shopping", 156.78, "2024-06-12"),
+  new Expense(11, "Pharmacy", 23.4, "2024-06-11"),
+  new Expense(12, "Movie Tickets", 28.0, "2024-06-10"),
+  new Expense(13, "Parking Fee", 12.0, "2024-06-09"),
+  new Expense(14, "Lunch", 16.25, "2024-06-08"),
+  new Expense(15, "Internet Bill", 79.99, "2024-06-07"),
+  new Expense(16, "Car Maintenance", 245.0, "2024-06-06"),
+  new Expense(17, "Clothing Store", 98.5, "2024-06-05"),
+  new Expense(18, "Pet Supplies", 42.3, "2024-06-04"),
+  new Expense(19, "Home Depot", 87.65, "2024-06-03"),
+  new Expense(20, "Spotify Premium", 9.99, "2024-06-02"),
+  new Expense(21, "Fast Food", 11.45, "2024-06-01"),
+  new Expense(22, "Electric Bill", 134.78, "2024-05-31"),
+  new Expense(23, "Haircut", 35.0, "2024-05-30"),
+  new Expense(24, "Video Game", 59.99, "2024-05-29"),
+  new Expense(25, "Taxi", 22.75, "2024-05-28"),
+];
