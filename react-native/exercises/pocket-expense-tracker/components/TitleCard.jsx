@@ -15,13 +15,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 20,
     marginHorizontal: 10,
-    backgroundColor: "#A0C878",
+    backgroundColor: "#021526",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "white",
     maxWidth: 300,
+    elevation: 4,
+    shadowColor: "white",
+    shadowOffset: { width: 1, height: 1 },
+    shadowRadius: 6,
+    shadowOpacity: 0.5,
   },
   text: {
     paddingVertical: 12,
     paddingHorizontal: 35,
+    color: "white",
   },
 });
 

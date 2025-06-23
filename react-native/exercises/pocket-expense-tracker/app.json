@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "backgroundColor": "#FAF6E9",
+    "backgroundColor": "#6EACDA",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
