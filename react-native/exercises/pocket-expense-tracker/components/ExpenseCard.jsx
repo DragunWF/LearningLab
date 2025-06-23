@@ -1,8 +1,10 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 import Card from "./Card";
+import { formatNumber } from "../helpers/utils";
 
 function ExpenseCard({ name, date, expense, onEdit }) {
+  console.log(expense, typeof expense, formatNumber(expense));
   return (
     <Card style={styles.cardContainer}>
       <View style={styles.cardInfoContainer}>
@@ -12,7 +14,7 @@ function ExpenseCard({ name, date, expense, onEdit }) {
       <View style={styles.buttonContainer}>
         <Pressable onPress={onEdit}>
           <View>
-            <Text style={styles.text}>₱ {expense}</Text>
+            <Text style={styles.text}>₱ {formatNumber(expense)}</Text>
           </View>
         </Pressable>
       </View>

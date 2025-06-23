@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-import { EXPENSES } from "../data/dummyData";
+import { EXPENSES } from "../helpers/dummyData";
 
 export const ExpensesContext = createContext({
   expenses: [...EXPENSES],

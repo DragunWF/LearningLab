@@ -7,7 +7,7 @@ function ExpenseSummaryCard({ subHeaderText, totalText }) {
     <View style={styles.container}>
       <Card style={styles.cardContainer}>
         <Text style={styles.text}>{subHeaderText}</Text>
-        <Text style={styles.text}>{totalText}</Text>
+        <Text style={styles.text}>₱ {totalText}</Text>
       </Card>
     </View>
   );

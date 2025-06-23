@@ -6,9 +6,11 @@ import ExpenseSummaryCard from "../components/TitleCard";
 import IconButton from "../components/IconButton";
 import ExpenseList from "../components/ExpenseList";
 import { ExpensesContext } from "../store/ExpensesContext";
+import { getTotalExpenses, formatNumber } from "../helpers/utils";
 
 function RecentExpensesScreen({ navigation }) {
   const expensesContext = useContext(ExpensesContext);
+  const totalExpenses = getTotalExpenses(expensesContext.expenses);
 
   useLayoutEffect(() => {
     function addExpenseHandler() {
@@ -32,7 +34,10 @@ function RecentExpensesScreen({ navigation }) {
   return (
     <LinearGradient style={styles.screen} colors={["#03346E", "#6EACDA"]}>
       <View style={styles.container}>
-        <ExpenseSummaryCard subHeaderText="Last 7 Days" totalText="₱ 0.00" />
+        <ExpenseSummaryCard
+          subHeaderText="Last 7 Days"
+          totalText={formatNumber(totalExpenses)}
+        />
         <View style={styles.expensesContainer}>
           <ExpenseList data={expensesContext.expenses} />
         </View>
