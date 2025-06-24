@@ -6,6 +6,7 @@ import { ExpensesContext } from "../store/ExpensesContext";
 
 function ExpenseModalForm({ isVisible }) {
   const expensesContext = useContext(ExpensesContext);
+
   const [expenseName, setExpenseName] = useState("");
   const [moneySpent, setMoneySpent] = useState("");
 
