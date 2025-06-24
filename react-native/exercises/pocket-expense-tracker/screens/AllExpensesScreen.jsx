@@ -1,5 +1,5 @@
 import { useLayoutEffect, useContext } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
 import IconButton from "../components/IconButton";
 import { ExpensesContext } from "../store/ExpensesContext";
@@ -27,7 +27,9 @@ function AllExpensesScreen({ navigation }) {
     });
   }, []);
 
-  return <ExpenseDashboard data={expensesContext.expenses} />;
+  return (
+    <ExpenseDashboard summaryTitle="Total" data={expensesContext.expenses} />
+  );
 }
 
 const styles = StyleSheet.create({

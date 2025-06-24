@@ -5,14 +5,14 @@ import ExpenseSummaryCard from "./TitleCard";
 import ExpenseList from "./ExpenseList";
 import { formatNumber, getTotalExpenses } from "../helpers/utils";
 
-function ExpenseDashboard({ data }) {
+function ExpenseDashboard({ summaryTitle, data }) {
   const totalExpenses = getTotalExpenses(data);
 
   return (
     <LinearGradient style={styles.screen} colors={["#03346E", "#6EACDA"]}>
       <View style={styles.container}>
         <ExpenseSummaryCard
-          subHeaderText="Last 7 Days"
+          subHeaderText={summaryTitle}
           totalText={formatNumber(totalExpenses)}
         />
         <View style={styles.expensesContainer}>

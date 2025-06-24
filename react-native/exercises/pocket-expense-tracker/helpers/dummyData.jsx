@@ -26,4 +26,9 @@ export const EXPENSES = [
   new Expense(23, "Haircut", 35.0, "2024-05-30"),
   new Expense(24, "Video Game", 59.99, "2024-05-29"),
   new Expense(25, "Taxi", 22.75, "2024-05-28"),
+  new Expense(26, "Morning Coffee", 5.5, "2025-06-23"),
+  new Expense(27, "Lunch Special", 18.75, "2025-06-23"),
+  new Expense(28, "Gas Fill-up", 52.0, "2025-06-23"),
+  new Expense(29, "Grocery Run", 89.3, "2025-06-24"),
+  new Expense(30, "Pizza Delivery", 24.99, "2025-06-22"),
 ];

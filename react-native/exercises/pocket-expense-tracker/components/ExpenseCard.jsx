@@ -4,7 +4,6 @@ import Card from "./Card";
 import { formatNumber } from "../helpers/utils";
 
 function ExpenseCard({ name, date, expense, onEdit }) {
-  console.log(expense, typeof expense, formatNumber(expense));
   return (
     <Card style={styles.cardContainer}>
       <View style={styles.cardInfoContainer}>
