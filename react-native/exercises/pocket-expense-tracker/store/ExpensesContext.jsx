@@ -10,13 +10,29 @@ export const ExpensesContext = createContext({
 });
 
 function ExpensesContextProvider({ children }) {
-  const [expenses, setExpense] = useState([...EXPENSES]);
+  const [expenses, setExpenses] = useState([...EXPENSES]);
 
-  function addExpense(id) {}
+  function addExpense(expense) {
+    setExpenses((current) => [...current, expense]);
+  }
 
-  function deleteExpense(id) {}
+  function deleteExpense(targetId) {
+    setExpenses((current) =>
+      current.filter((expense) => expense.id !== targetId)
+    );
+  }
 
-  function updateExpense(id) {}
+  function updateExpense(updatedExpense) {
+    const currentExpenses = [...expenses];
+    for (let i = 0; i < currentExpenses.length; i++) {
+      const expense = currentExpenses[i];
+      if (expense.id === updatedExpense.id) {
+        currentExpenses[i] = updatedExpense;
+        break;
+      }
+    }
+    setExpenses(currentExpenses);
+  }
 
   const value = {
     expenses: expenses,
