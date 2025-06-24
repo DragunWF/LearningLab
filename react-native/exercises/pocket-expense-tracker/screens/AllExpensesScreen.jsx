@@ -1,16 +1,33 @@
+import { useLayoutEffect, useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-import ExpenseSummaryCard from "../components/TitleCard";
+import IconButton from "../components/IconButton";
+import { ExpensesContext } from "../store/ExpensesContext";
+import ExpenseDashboard from "../components/ExpenseDashboard";
 
-function AllExpensesScreen() {
-  return (
-    <View style={styles.container}>
-      <ExpenseSummaryCard subHeaderText="Total" totalText="₱ 0.00" />
-      <View style={styles.expensesContainer}>
-        <Text>Expense List</Text>
-      </View>
-    </View>
-  );
+function AllExpensesScreen({ navigation }) {
+  const expensesContext = useContext(ExpensesContext);
+
+  useLayoutEffect(() => {
+    function addExpenseHandler() {
+      console.log("Add Expense Button Pressed");
+    }
+
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <IconButton
+            name="add"
+            color="black"
+            onPress={addExpenseHandler}
+            style={styles.navHeaderButton}
+          />
+        );
+      },
+    });
+  }, []);
+
+  return <ExpenseDashboard data={expensesContext.expenses} />;
 }
 
 const styles = StyleSheet.create({
