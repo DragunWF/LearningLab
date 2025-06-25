@@ -2,9 +2,12 @@ import { createContext, useState } from "react";
 
 import ExpenseModalForm from "../components/ExpenseModalForm";
 import { EXPENSES } from "../helpers/dummyData";
+import { getDateToday } from "../helpers/utils";
+import Expense from "../models/expense";
 
 export const ExpensesContext = createContext({
   expenses: [...EXPENSES],
+  generateExpenseId: () => {},
   openAddExpenseForm: () => {},
   openEditExpenseForm: (expenseId) => {},
   editingExpenseId: null,
@@ -19,8 +22,26 @@ function ExpensesContextProvider({ children }) {
   const [editingExpenseId, setEditingExpenseId] = useState(null);
   const [expenses, setExpenses] = useState([...EXPENSES]);
 
-  function addExpense(expense) {
-    setExpenses((current) => [...current, expense]);
+  function generateExpenseId() {
+    let maxId = expenses[0];
+    for (let expense of expenses) {
+      if (expense.id > maxId) {
+        maxId = expense.id;
+      }
+    }
+    return maxId + 1;
+  }
+
+  function addExpense(expenseName, expenseAmount) {
+    setExpenses((current) => [
+      ...current,
+      new Expense(
+        generateExpenseId(),
+        expenseName,
+        expenseAmount,
+        getDateToday()
+      ),
+    ]);
   }
 
   function deleteExpense(targetId) {
@@ -58,6 +79,7 @@ function ExpensesContextProvider({ children }) {
 
   const value = {
     expenses: expenses,
+    generateExpenseId: generateExpenseId,
     openAddExpenseForm: openAddExpenseForm,
     openEditExpenseForm: openEditExpenseForm,
     editingExpenseId: editingExpenseId,

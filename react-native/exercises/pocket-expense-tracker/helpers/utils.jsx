@@ -34,3 +34,7 @@ export function isCurrentWeek(date) {
 export function getSortedExpensesByDate(expenses) {
   return [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
+
+export function getDateToday() {
+  return new Date().toISOString().split("T")[0];
+}

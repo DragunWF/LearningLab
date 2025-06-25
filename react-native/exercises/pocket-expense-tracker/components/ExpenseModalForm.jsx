@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Text, Modal, TextInput } from "react-native";
+import { StyleSheet, View, Text, Modal, TextInput, Alert } from "react-native";
 
 import PrimaryButton from "./PrimaryButton";
 import IconButton from "./IconButton";
@@ -10,7 +10,7 @@ function ExpenseModalForm({ isVisible }) {
   const editingExpenseId = expensesContext.editingExpenseId;
   const isEditForm = editingExpenseId !== null;
 
-  const expense = expensesContext.expenses.find(
+  const currentExpense = expensesContext.expenses.find(
     (expense) => expense.id === editingExpenseId
   );
 
@@ -19,15 +19,15 @@ function ExpenseModalForm({ isVisible }) {
 
   // Update state when expense data changes
   useEffect(() => {
-    if (isEditForm && expense) {
-      setExpenseName(expense.name || "");
-      setMoneySpent(expense.expense?.toString() || "");
+    if (isEditForm && currentExpense) {
+      setExpenseName(currentExpense.name || "");
+      setMoneySpent(currentExpense.expense?.toString() || "");
     } else {
       // Reset form for new expense
       setExpenseName("");
       setMoneySpent("");
     }
-  }, [isEditForm, expense]);
+  }, [isEditForm, currentExpense]);
 
   function expenseNameInputHandler(enteredName) {
     setExpenseName(enteredName);
@@ -37,12 +37,65 @@ function ExpenseModalForm({ isVisible }) {
     setMoneySpent(enteredMoney);
   }
 
-  function deleteExpense() {}
+  function deleteExpense() {
+    expensesContext.deleteExpense(editingExpenseId);
+    expensesContext.closeExpenseForm();
+  }
 
   function onSubmit() {
-    if (isEditForm) {
-    } else {
+    if (!isFormInputsValid()) {
+      return;
     }
+
+    if (isEditForm) {
+      expensesContext.updateExpense(currentExpense);
+    } else {
+      expensesContext.addExpense(expenseName, Number(moneySpent));
+    }
+
+    expensesContext.closeExpenseForm();
+  }
+
+  function isFormInputsValid() {
+    if (!expenseName) {
+      alert(
+        "Empty Expense Name!",
+        "Please make sure you enter your expense name!"
+      );
+      return false;
+    }
+    if (!moneySpent.length) {
+      alert(
+        "Empty Field on Money Spent!",
+        "Please make sure you enter the amount of money you have spent on this expense!"
+      );
+      return false;
+    }
+    if (moneySpent <= 0) {
+      alert(
+        "Invalid Money Amount!",
+        "The inputted money spent cannot be zero or negative!"
+      );
+      return false;
+    }
+    try {
+      Number(moneySpent);
+    } catch (err) {
+      alert(
+        "Invalid Money Input!",
+        "Make sure the inputted value is a valid number!"
+      );
+    }
+    return true;
+  }
+
+  function alert(title, message) {
+    Alert.alert(title, message, [
+      {
+        text: "Okay",
+        style: "cancel",
+      },
+    ]);
   }
 
   return (
@@ -67,7 +120,7 @@ function ExpenseModalForm({ isVisible }) {
             placeholder="Money Spent"
             value={moneySpent}
             onChangeText={moneySpentInputHandler}
-            keyboardType="number-pad"
+            keyboardType="decimal-pad"
           />
           <View style={styles.buttonsContainer}>
             {isEditForm && (

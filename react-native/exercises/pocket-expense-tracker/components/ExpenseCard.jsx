@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 import Card from "./Card";
 import PrimaryButton from "./PrimaryButton";
