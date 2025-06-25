@@ -48,12 +48,7 @@ function ExpenseModalForm({ isVisible }) {
     }
 
     if (isEditForm) {
-      const updatedExpense = {
-        ...currentExpense,
-        name: expenseName,
-        expense: moneySpent,
-      };
-      expensesContext.updateExpense(updatedExpense);
+      expensesContext.updateExpense(editingExpenseId, expenseName, moneySpent);
     } else {
       expensesContext.addExpense(expenseName, Number(moneySpent));
     }

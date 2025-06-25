@@ -50,11 +50,16 @@ function ExpensesContextProvider({ children }) {
     );
   }
 
-  function updateExpense(updatedExpense) {
+  function updateExpense(targetId, updatedName, updatedExpenseAmount) {
     const currentExpenses = [...expenses];
     for (let i = 0; i < currentExpenses.length; i++) {
       const expense = currentExpenses[i];
-      if (expense.id === updatedExpense.id) {
+      if (expense.id === targetId) {
+        const updatedExpense = {
+          ...expense,
+          name: updatedName,
+          expense: updatedExpenseAmount,
+        };
         currentExpenses[i] = updatedExpense;
         break;
       }
