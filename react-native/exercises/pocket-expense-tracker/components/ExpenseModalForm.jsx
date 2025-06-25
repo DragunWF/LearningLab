@@ -19,15 +19,17 @@ function ExpenseModalForm({ isVisible }) {
 
   // Update state when expense data changes
   useEffect(() => {
-    if (isEditForm && currentExpense) {
-      setExpenseName(currentExpense.name || "");
-      setMoneySpent(currentExpense.expense?.toString() || "");
-    } else {
-      // Reset form for new expense
-      setExpenseName("");
-      setMoneySpent("");
+    if (isVisible) {
+      if (isEditForm && currentExpense) {
+        setExpenseName(currentExpense.name || "");
+        setMoneySpent(currentExpense.expense?.toString() || "");
+      } else {
+        // Reset form for new expense
+        setExpenseName("");
+        setMoneySpent("");
+      }
     }
-  }, [isEditForm, currentExpense]);
+  }, [isEditForm, currentExpense, isVisible]);
 
   function expenseNameInputHandler(enteredName) {
     setExpenseName(enteredName);
