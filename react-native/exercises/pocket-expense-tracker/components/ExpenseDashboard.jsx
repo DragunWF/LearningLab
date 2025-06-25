@@ -1,19 +1,15 @@
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import ExpenseSummaryCard from "./TitleCard";
 import ExpenseList from "./ExpenseList";
-import ExpenseModalForm from "./ExpenseModalForm";
 import { formatNumber, getTotalExpenses } from "../helpers/utils";
 
 function ExpenseDashboard({ summaryTitle, data }) {
-  const [isExpenseFormModalOpen, setIsExpenseFormModalOpen] = useState(false);
   const totalExpenses = getTotalExpenses(data);
 
   return (
     <LinearGradient style={styles.screen} colors={["#03346E", "#6EACDA"]}>
-      <ExpenseModalForm isVisible={false} />
       <View style={styles.container}>
         <ExpenseSummaryCard
           subHeaderText={summaryTitle}

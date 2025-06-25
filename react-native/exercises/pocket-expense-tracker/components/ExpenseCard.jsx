@@ -1,9 +1,13 @@
+import { useContext } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 import Card from "./Card";
 import { formatNumber } from "../helpers/utils";
+import { ExpensesContext } from "../store/ExpensesContext";
 
-function ExpenseCard({ name, date, expense, onEdit }) {
+function ExpenseCard({ name, date, expense }) {
+  const expensesContext = useContext(ExpensesContext);
+
   return (
     <Card style={styles.cardContainer}>
       <View style={styles.cardInfoContainer}>
@@ -11,7 +15,7 @@ function ExpenseCard({ name, date, expense, onEdit }) {
         <Text style={styles.text}>{date}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable onPress={onEdit}>
+        <Pressable onPress={expensesContext.openExpenseForm}>
           <View>
             <Text style={styles.text}>₱ {formatNumber(expense)}</Text>
           </View>

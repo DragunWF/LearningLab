@@ -1,15 +1,19 @@
 import { createContext, useState } from "react";
 
+import ExpenseModalForm from "../components/ExpenseModalForm";
 import { EXPENSES } from "../helpers/dummyData";
 
 export const ExpensesContext = createContext({
   expenses: [...EXPENSES],
-  addExpense: (id) => {},
-  deleteExpense: (id) => {},
-  updateExpense: (id) => {},
+  openExpenseForm: () => {},
+  closeExpenseForm: () => {},
+  addExpense: (expense) => {},
+  deleteExpense: (targetId) => {},
+  updateExpense: (updatedExpense) => {},
 });
 
 function ExpensesContextProvider({ children }) {
+  const [isExpenseModalFormOpen, setIsExpenseModalFormOpen] = useState(false);
   const [expenses, setExpenses] = useState([...EXPENSES]);
 
   function addExpense(expense) {
@@ -34,8 +38,18 @@ function ExpensesContextProvider({ children }) {
     setExpenses(currentExpenses);
   }
 
+  function openExpenseForm() {
+    setIsExpenseModalFormOpen(true);
+  }
+
+  function closeExpenseForm() {
+    setIsExpenseModalFormOpen(false);
+  }
+
   const value = {
     expenses: expenses,
+    openExpenseForm: openExpenseForm,
+    closeExpenseForm: closeExpenseForm,
     addExpense: addExpense,
     deleteExpense: deleteExpense,
     updateExpense: updateExpense,
@@ -43,6 +57,7 @@ function ExpensesContextProvider({ children }) {
 
   return (
     <ExpensesContext.Provider value={value}>
+      <ExpenseModalForm isVisible={isExpenseModalFormOpen} />
       {children}
     </ExpensesContext.Provider>
   );
