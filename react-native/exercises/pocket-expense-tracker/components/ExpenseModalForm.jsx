@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, Modal, TextInput, Alert } from "react-native";
+import Toast from "react-native-toast-message";
 
 import PrimaryButton from "./PrimaryButton";
 import IconButton from "./IconButton";
@@ -25,8 +26,7 @@ function ExpenseModalForm({ isVisible }) {
         setMoneySpent(currentExpense.expense?.toString() || "");
       } else {
         // Reset form for new expense
-        setExpenseName("");
-        setMoneySpent("");
+        resetFormHandler();
       }
     }
   }, [isEditForm, currentExpense, isVisible]);
@@ -39,53 +39,100 @@ function ExpenseModalForm({ isVisible }) {
     setMoneySpent(enteredMoney);
   }
 
-  function deleteExpense() {
-    expensesContext.deleteExpense(editingExpenseId);
-    expensesContext.closeExpenseForm();
+  function resetFormHandler() {
+    setExpenseName("");
+    setMoneySpent("");
   }
 
-  function onSubmit() {
+  function deleteExpenseHandler() {
+    Alert.alert(
+      "Delete Expense",
+      "Are you sure you want to delete this expense?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            expensesContext.deleteExpense(editingExpenseId);
+            expensesContext.closeExpenseForm();
+          },
+        },
+      ]
+    );
+  }
+
+  function submitFormHandler() {
     if (!isFormInputsValid()) {
       return;
     }
 
-    if (isEditForm) {
-      expensesContext.updateExpense(
-        editingExpenseId,
-        expenseName,
-        Number(moneySpent)
-      );
-    } else {
-      expensesContext.addExpense(expenseName, Number(moneySpent));
-    }
-
-    expensesContext.closeExpenseForm();
+    Alert.alert(
+      "Confirm Action",
+      isEditForm
+        ? "Are you sure you want to edit this expense?"
+        : "Are you sure you want to add this expense?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            if (isEditForm) {
+              expensesContext.updateExpense(
+                editingExpenseId,
+                expenseName,
+                Number(moneySpent)
+              );
+              Toast.show({
+                type: "success",
+                text1: "Expense Updated",
+                text2: `${expenseName} has been updated!`,
+              });
+            } else {
+              expensesContext.addExpense(expenseName, Number(moneySpent));
+              Toast.show({
+                type: "success",
+                text1: "New Expense Added",
+                text2: `${expenseName} has been added to the list!`,
+              });
+            }
+            expensesContext.closeExpenseForm();
+          },
+        },
+      ]
+    );
   }
 
   function isFormInputsValid() {
     if (!expenseName) {
-      alert(
+      validationAlert(
         "Empty Expense Name!",
         "Please make sure you enter your expense name!"
       );
       return false;
     }
     if (!moneySpent.length) {
-      alert(
+      validationAlert(
         "Empty Field on Money Spent!",
         "Please make sure you enter the amount of money you have spent on this expense!"
       );
       return false;
     }
     if (moneySpent <= 0) {
-      alert(
+      validationAlert(
         "Invalid Money Amount!",
         "The inputted money spent cannot be zero or negative!"
       );
       return false;
     }
     if (isNaN(Number(moneySpent))) {
-      alert(
+      validationAlert(
         "Invalid Money Input!",
         "Make sure the inputted value is a valid number!"
       );
@@ -95,7 +142,7 @@ function ExpenseModalForm({ isVisible }) {
     return true;
   }
 
-  function alert(title, message) {
+  function validationAlert(title, message) {
     Alert.alert(title, message, [
       {
         text: "Okay",
@@ -129,15 +176,21 @@ function ExpenseModalForm({ isVisible }) {
             keyboardType="decimal-pad"
           />
           <View style={styles.buttonsContainer}>
+            <PrimaryButton
+              style={styles.resetButton}
+              onPress={resetFormHandler}
+            >
+              Reset
+            </PrimaryButton>
             {isEditForm && (
               <PrimaryButton
                 style={styles.deleteButton}
-                onPress={deleteExpense}
+                onPress={deleteExpenseHandler}
               >
                 Delete
               </PrimaryButton>
             )}
-            <PrimaryButton onPress={onSubmit}>
+            <PrimaryButton onPress={submitFormHandler}>
               {isEditForm ? "Confirm Edit" : "Add New Expense"}
             </PrimaryButton>
           </View>
@@ -188,6 +241,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "70%",
     padding: 16,
+  },
+  resetButton: {
+    backgroundColor: "#374151",
   },
   deleteButton: {
     backgroundColor: "#961111",
