@@ -1,11 +1,10 @@
-import { useLayoutEffect, useContext } from "react";
+import { useContext } from "react";
 import { StyleSheet } from "react-native";
 
-import IconButton from "../components/IconButton";
 import ExpenseDashboard from "../components/ExpenseDashboard";
+import useHeaderButton from "../helpers/useHeaderButton";
 import { ExpensesContext } from "../store/ExpensesContext";
 import { isCurrentWeek } from "../helpers/utils";
-import useHeaderButton from "../helpers/useHeaderButton";
 
 function RecentExpensesScreen({ navigation }) {
   const expensesContext = useContext(ExpensesContext);
@@ -20,10 +19,6 @@ function RecentExpensesScreen({ navigation }) {
   return <ExpenseDashboard summaryTitle="Last 7 Days" data={expenseData} />;
 }
 
-const styles = StyleSheet.create({
-  navHeaderButton: {
-    marginRight: 20,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default RecentExpensesScreen;
