@@ -83,14 +83,14 @@ function ExpenseModalForm({ isVisible }) {
       );
       return false;
     }
-    try {
-      Number(moneySpent);
-    } catch (err) {
+    if (isNaN(Number(moneySpent))) {
       alert(
         "Invalid Money Input!",
         "Make sure the inputted value is a valid number!"
       );
+      return false;
     }
+
     return true;
   }
 
