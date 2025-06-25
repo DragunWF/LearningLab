@@ -5,11 +5,21 @@ import PrimaryButton from "./PrimaryButton";
 import IconButton from "./IconButton";
 import { ExpensesContext } from "../store/ExpensesContext";
 
-function ExpenseModalForm({ isVisible, isEditForm }) {
+function ExpenseModalForm({ isVisible }) {
   const expensesContext = useContext(ExpensesContext);
+  const editingExpenseId = expensesContext.editingExpenseId;
+  const isEditForm = editingExpenseId !== null;
 
-  const [expenseName, setExpenseName] = useState("");
-  const [moneySpent, setMoneySpent] = useState("");
+  const expense = expensesContext.expenses.find(
+    (expense) => expense.id === editingExpenseId
+  );
+
+  const [expenseName, setExpenseName] = useState(
+    isEditForm ? expense.name : ""
+  );
+  const [moneySpent, setMoneySpent] = useState(
+    isEditForm ? expense.expense : ""
+  );
 
   function expenseNameInputHandler(enteredName) {
     setExpenseName(enteredName);
@@ -41,19 +51,28 @@ function ExpenseModalForm({ isVisible, isEditForm }) {
           <TextInput
             style={styles.textInput}
             placeholder="Expense Name"
+            value={expenseName}
             onChange={expenseNameInputHandler}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Money Spent"
+            value={moneySpent}
             onChange={moneySpentInputHandler}
             keyboardType="number-pad"
           />
           <View style={styles.buttonsContainer}>
-            <PrimaryButton style={styles.deleteButton} onPress={deleteExpense}>
-              Delete
+            {isEditForm && (
+              <PrimaryButton
+                style={styles.deleteButton}
+                onPress={deleteExpense}
+              >
+                Delete
+              </PrimaryButton>
+            )}
+            <PrimaryButton onPress={onSubmit}>
+              {isEditForm ? "Confirm Edit" : "Add New Expense"}
             </PrimaryButton>
-            <PrimaryButton onPress={onSubmit}>Submit</PrimaryButton>
           </View>
         </View>
       </View>
@@ -96,8 +115,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#3DC2EC",
     backgroundColor: "#3DC2EC",
-    maxWidth: 300, // Add explicit max width
-    minWidth: 200, // Add explicit min width
+    maxWidth: 300,
+    minWidth: 200,
     color: "black",
     borderRadius: 6,
     width: "70%",

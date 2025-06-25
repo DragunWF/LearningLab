@@ -14,7 +14,7 @@ function RecentExpensesScreen({ navigation }) {
     isCurrentWeek(expense.date)
   );
 
-  useHeaderButton(navigation, "add", expensesContext.openExpenseForm);
+  useHeaderButton(navigation, "add", expensesContext.openAddExpenseForm);
 
   return <ExpenseDashboard summaryTitle="Last 7 Days" data={expenseData} />;
 }

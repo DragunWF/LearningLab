@@ -5,6 +5,7 @@ function ExpenseList({ data }) {
   function renderExpenseItem(itemData) {
     return (
       <ExpenseCard
+        id={itemData.item.id}
         name={itemData.item.name}
         date={itemData.item.date}
         expense={itemData.item.expense}

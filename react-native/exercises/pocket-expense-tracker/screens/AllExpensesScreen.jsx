@@ -8,7 +8,7 @@ import useHeaderButton from "../helpers/useHeaderButton";
 function AllExpensesScreen({ navigation }) {
   const expensesContext = useContext(ExpensesContext);
 
-  useHeaderButton(navigation, "add", expensesContext.openExpenseForm);
+  useHeaderButton(navigation, "add", expensesContext.openAddExpenseForm);
 
   return (
     <ExpenseDashboard summaryTitle="Total" data={expensesContext.expenses} />

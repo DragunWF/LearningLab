@@ -6,8 +6,12 @@ import PrimaryButton from "./PrimaryButton";
 import { formatNumber } from "../helpers/utils";
 import { ExpensesContext } from "../store/ExpensesContext";
 
-function ExpenseCard({ name, date, expense }) {
+function ExpenseCard({ id, name, date, expense }) {
   const expensesContext = useContext(ExpensesContext);
+
+  function openEditExpenseForm() {
+    expensesContext.openEditExpenseForm(id);
+  }
 
   return (
     <Card style={styles.cardContainer}>
@@ -15,7 +19,7 @@ function ExpenseCard({ name, date, expense }) {
         <Text style={styles.text}>{name}</Text>
         <Text style={styles.text}>{date}</Text>
       </View>
-      <PrimaryButton onPress={expensesContext.openExpenseForm}>
+      <PrimaryButton onPress={openEditExpenseForm}>
         ₱ {formatNumber(expense)}
       </PrimaryButton>
     </Card>

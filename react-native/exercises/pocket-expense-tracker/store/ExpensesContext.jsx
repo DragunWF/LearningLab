@@ -5,7 +5,9 @@ import { EXPENSES } from "../helpers/dummyData";
 
 export const ExpensesContext = createContext({
   expenses: [...EXPENSES],
-  openExpenseForm: () => {},
+  openAddExpenseForm: () => {},
+  openEditExpenseForm: (expenseId) => {},
+  editingExpenseId: null,
   closeExpenseForm: () => {},
   addExpense: (expense) => {},
   deleteExpense: (targetId) => {},
@@ -14,6 +16,7 @@ export const ExpensesContext = createContext({
 
 function ExpensesContextProvider({ children }) {
   const [isExpenseModalFormOpen, setIsExpenseModalFormOpen] = useState(false);
+  const [editingExpenseId, setEditingExpenseId] = useState(null);
   const [expenses, setExpenses] = useState([...EXPENSES]);
 
   function addExpense(expense) {
@@ -38,17 +41,26 @@ function ExpensesContextProvider({ children }) {
     setExpenses(currentExpenses);
   }
 
-  function openExpenseForm() {
+  function openAddExpenseForm() {
+    setEditingExpenseId(null);
+    setIsExpenseModalFormOpen(true);
+  }
+
+  function openEditExpenseForm(expenseId) {
+    setEditingExpenseId(expenseId);
     setIsExpenseModalFormOpen(true);
   }
 
   function closeExpenseForm() {
+    setEditingExpenseId(null);
     setIsExpenseModalFormOpen(false);
   }
 
   const value = {
     expenses: expenses,
-    openExpenseForm: openExpenseForm,
+    openAddExpenseForm: openAddExpenseForm,
+    openEditExpenseForm: openEditExpenseForm,
+    editingExpenseId: editingExpenseId,
     closeExpenseForm: closeExpenseForm,
     addExpense: addExpense,
     deleteExpense: deleteExpense,
