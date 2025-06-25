@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, Text, Modal, TextInput } from "react-native";
 
 import PrimaryButton from "./PrimaryButton";
@@ -14,12 +14,20 @@ function ExpenseModalForm({ isVisible }) {
     (expense) => expense.id === editingExpenseId
   );
 
-  const [expenseName, setExpenseName] = useState(
-    isEditForm ? expense.name : ""
-  );
-  const [moneySpent, setMoneySpent] = useState(
-    isEditForm ? expense.expense : ""
-  );
+  const [expenseName, setExpenseName] = useState("");
+  const [moneySpent, setMoneySpent] = useState("");
+
+  // Update state when expense data changes
+  useEffect(() => {
+    if (isEditForm && expense) {
+      setExpenseName(expense.name || "");
+      setMoneySpent(expense.expense?.toString() || "");
+    } else {
+      // Reset form for new expense
+      setExpenseName("");
+      setMoneySpent("");
+    }
+  }, [isEditForm, expense]);
 
   function expenseNameInputHandler(enteredName) {
     setExpenseName(enteredName);
@@ -52,13 +60,13 @@ function ExpenseModalForm({ isVisible }) {
             style={styles.textInput}
             placeholder="Expense Name"
             value={expenseName}
-            onChange={expenseNameInputHandler}
+            onChangeText={expenseNameInputHandler}
           />
           <TextInput
             style={styles.textInput}
             placeholder="Money Spent"
             value={moneySpent}
-            onChange={moneySpentInputHandler}
+            onChangeText={moneySpentInputHandler}
             keyboardType="number-pad"
           />
           <View style={styles.buttonsContainer}>
