@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 import Card from "./Card";
+import PrimaryButton from "./PrimaryButton";
 import { formatNumber } from "../helpers/utils";
 import { ExpensesContext } from "../store/ExpensesContext";
 
@@ -14,13 +15,9 @@ function ExpenseCard({ name, date, expense }) {
         <Text style={styles.text}>{name}</Text>
         <Text style={styles.text}>{date}</Text>
       </View>
-      <View style={styles.buttonContainer}>
-        <Pressable onPress={expensesContext.openExpenseForm}>
-          <View>
-            <Text style={styles.text}>₱ {formatNumber(expense)}</Text>
-          </View>
-        </Pressable>
-      </View>
+      <PrimaryButton onPress={expensesContext.openExpenseForm}>
+        ₱ {formatNumber(expense)}
+      </PrimaryButton>
     </Card>
   );
 }
@@ -34,14 +31,6 @@ const styles = StyleSheet.create({
   },
   cardInfoContainer: {
     gap: 3,
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    backgroundColor: "#03346E",
-    borderRadius: 15,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "white",
   },
   text: {
     color: "white",
