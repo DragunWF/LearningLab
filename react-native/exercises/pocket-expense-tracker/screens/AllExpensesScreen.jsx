@@ -1,31 +1,14 @@
 import { useLayoutEffect, useContext } from "react";
 import { StyleSheet } from "react-native";
 
-import IconButton from "../components/IconButton";
-import { ExpensesContext } from "../store/ExpensesContext";
 import ExpenseDashboard from "../components/ExpenseDashboard";
+import { ExpensesContext } from "../store/ExpensesContext";
+import useHeaderButton from "../helpers/useHeaderButton";
 
 function AllExpensesScreen({ navigation }) {
   const expensesContext = useContext(ExpensesContext);
 
-  useLayoutEffect(() => {
-    function addExpenseHandler() {
-      console.log("Add Expense Button Pressed");
-    }
-
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <IconButton
-            name="add"
-            color="black"
-            onPress={addExpenseHandler}
-            style={styles.navHeaderButton}
-          />
-        );
-      },
-    });
-  }, []);
+  useHeaderButton(navigation, "add", expensesContext.openExpenseForm);
 
   return (
     <ExpenseDashboard summaryTitle="Total" data={expensesContext.expenses} />

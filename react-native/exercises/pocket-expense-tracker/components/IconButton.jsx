@@ -2,10 +2,11 @@ import { StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 function IconButton({ name, color, onPress, style }) {
+  console.log(name, color);
   return (
     <Pressable
       onPress={onPress}
-      style={[style, ({ pressed }) => (pressed ? styles.pressed : null)]}
+      style={({ pressed }) => [style, pressed && styles.pressed]}
     >
       <Ionicons name={name} size={24} color={color} />
     </Pressable>
@@ -14,7 +15,7 @@ function IconButton({ name, color, onPress, style }) {
 
 const styles = StyleSheet.create({
   pressed: {
-    opacity: 0.25,
+    opacity: 0.6,
   },
 });
 

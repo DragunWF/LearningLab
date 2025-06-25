@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { StyleSheet, View, Text, Modal, TextInput } from "react-native";
 
 import PrimaryButton from "./PrimaryButton";
+import IconButton from "./IconButton";
 import { ExpensesContext } from "../store/ExpensesContext";
 
 function ExpenseModalForm({ isVisible, isEditForm }) {
@@ -29,6 +30,12 @@ function ExpenseModalForm({ isVisible, isEditForm }) {
   return (
     <Modal visible={isVisible} animationType="slide">
       <View style={styles.rootContainer}>
+        <IconButton
+          name="arrow-back"
+          color="white"
+          style={styles.topLeftBackButton}
+          onPress={expensesContext.closeExpenseForm}
+        />
         <View style={styles.inputContainer}>
           <Text style={styles.title}>Expense Form</Text>
           <TextInput
@@ -43,12 +50,6 @@ function ExpenseModalForm({ isVisible, isEditForm }) {
             keyboardType="number-pad"
           />
           <View style={styles.buttonsContainer}>
-            <PrimaryButton
-              style={styles.backButton}
-              onPress={expensesContext.closeExpenseForm}
-            >
-              Back
-            </PrimaryButton>
             <PrimaryButton style={styles.deleteButton} onPress={deleteExpense}>
               Delete
             </PrimaryButton>
@@ -66,6 +67,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#021526",
+  },
+  topLeftBackButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
+    padding: 10,
   },
   inputContainer: {
     flex: 1,
@@ -94,9 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "70%",
     padding: 16,
-  },
-  backButton: {
-    backgroundColor: "#64748B",
   },
   deleteButton: {
     backgroundColor: "#961111",

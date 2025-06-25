@@ -21,6 +21,7 @@ export default function App() {
               tabBarStyle: {
                 backgroundColor: "#021526",
               },
+              headerTintColor: "white",
             }}
           >
             <BottomTab.Screen
