@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
+
 import Input from "./Input";
 import Button from "../ui/Button";
 
-function ExpenseForm({ onCancel, submitButtonLabel }) {
+function ExpenseForm({ onCancel, onSubmit, submitButtonLabel }) {
   const [inputValues, setInputValues] = useState({
     amount: "",
     date: "",
@@ -19,7 +20,15 @@ function ExpenseForm({ onCancel, submitButtonLabel }) {
     });
   }
 
-  function submitHandler() {}
+  function submitHandler() {
+    const expenseData = {
+      amount: +inputValues.amount,
+      date: new Date(inputValues.date),
+      description: inputValues.description,
+    };
+
+    onSubmit(expenseData);
+  }
 
   return (
     <View style={styles.form}>
@@ -40,7 +49,7 @@ function ExpenseForm({ onCancel, submitButtonLabel }) {
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            onChangeText: () => inputChangedHandler.bind(this, "date"),
+            onChangeText: inputChangedHandler.bind(this, "date"),
             value: inputValues.date,
           }}
         />
@@ -49,7 +58,7 @@ function ExpenseForm({ onCancel, submitButtonLabel }) {
         label="Description"
         textInputConfig={{
           multiline: true,
-          onChangeText: () => inputChangedHandler.bind(this, "description"),
+          onChangeText: inputChangedHandler.bind(this, "description"),
           value: inputValues.description,
           // Commented code kept as notes:
           // autoCapitalize: "none"
