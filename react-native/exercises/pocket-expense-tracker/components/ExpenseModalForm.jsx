@@ -58,6 +58,11 @@ function ExpenseModalForm({ isVisible }) {
           style: "destructive",
           onPress: () => {
             expensesContext.deleteExpense(editingExpenseId);
+            Toast.show({
+              type: "success",
+              text1: "Expense Deleted",
+              text2: `${expenseName} has been removed from the list!`,
+            });
             expensesContext.closeExpenseForm();
           },
         },
