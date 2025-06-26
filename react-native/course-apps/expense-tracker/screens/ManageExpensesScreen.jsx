@@ -46,6 +46,7 @@ function ManageExpensesScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <TextInput />
       <View style={styles.buttons}>
         <Button style={styles.button} mode="flat" onPress={cancelHandler}>
           Cancel
