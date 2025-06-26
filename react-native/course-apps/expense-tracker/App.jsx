@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import ManageExpensesScreen from "./screens/ManageExpensesScreen";
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
 import AllExpensesScreen from "./screens/AllExpensesScreen";
@@ -28,7 +29,7 @@ function ExpensesOverView() {
     <BottomTabs.Navigator>
       <BottomTabs.Screen
         name="RecentExpenses"
-        compoent={RecentExpensesScreen}
+        component={RecentExpensesScreen}
       />
       <BottomTabs.Screen name="AllExpenses" component={AllExpensesScreen} />
     </BottomTabs.Navigator>
