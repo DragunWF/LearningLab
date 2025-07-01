@@ -3,8 +3,13 @@ import Constants from "expo-constants";
 
 const databaseUrl = Constants.expoConfig?.extra?.databaseUrl;
 
-export function storeExpense(expenseData) {
-  axios.post(`${databaseUrl}/expenses.json`, expenseData);
+export async function storeExpense(expenseData) {
+  const response = await axios.post(
+    `${databaseUrl}/expenses.json`,
+    expenseData
+  );
+  const id = response.data.name;
+  return id;
 }
 
 export async function fetchExpenses() {
