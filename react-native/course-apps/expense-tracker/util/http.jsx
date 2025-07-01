@@ -8,10 +8,9 @@ export function storeExpense(expenseData) {
 }
 
 export async function fetchExpenses() {
-  const response = await axios.get(`${databaseUrl}`);
+  const response = await axios.get(`${databaseUrl}/expenses.json`);
 
   const expenses = [];
-  console.log(response.data);
 
   for (const key in response.data) {
     const expenseObj = {
@@ -20,7 +19,6 @@ export async function fetchExpenses() {
       date: new Date(response.data[key].date),
       description: response.data[key].description,
     };
-    console.log(expenseObj);
     expenses.push(expenseObj);
   }
 
