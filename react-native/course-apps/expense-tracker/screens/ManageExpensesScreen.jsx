@@ -7,8 +7,10 @@ import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import ErrorOverlay from "../components/ui/ErrorOverlay";
 
 function ManageExpensesScreen({ route, navigation }) {
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const expensesContext = useContext(ExpensesContext);
 
@@ -26,11 +28,16 @@ function ManageExpensesScreen({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteExpenseHandler() {
-    setIsLoading(true);
-    expensesContext.deleteExpense(editedExpenseId);
-    await deleteExpense(editedExpenseId);
-    setIsLoading(false);
-    navigation.goBack();
+    try {
+      setIsLoading(true);
+      expensesContext.deleteExpense(editedExpenseId);
+      await deleteExpense(editedExpenseId);
+      navigation.goBack();
+    } catch (err) {
+      setError("An error occurred while trying to delete the expense!");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function cancelHandler() {
@@ -38,16 +45,25 @@ function ManageExpensesScreen({ route, navigation }) {
   }
 
   async function confirmHandler(expenseData) {
-    setIsLoading(true);
-    if (isEditing) {
-      expensesContext.updateExpense(editedExpenseId, expenseData);
-      await updateExpense(editedExpenseId, expenseData);
-    } else {
-      const id = await storeExpense(expenseData);
-      expensesContext.addExpense({ ...expenseData, id: id });
+    try {
+      setIsLoading(true);
+      if (isEditing) {
+        expensesContext.updateExpense(editedExpenseId, expenseData);
+        await updateExpense(editedExpenseId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        expensesContext.addExpense({ ...expenseData, id: id });
+      }
+      navigation.goBack();
+    } catch (err) {
+      setError("An error occurred while trying to submit your changes!");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-    navigation.goBack();
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={cancelHandler} />;
   }
 
   if (isLoading) {
