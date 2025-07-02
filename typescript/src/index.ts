@@ -6,6 +6,9 @@ function main() {
   console.log(a);
 
   console.log(duplicateStr("I love TypeScript ", 50));
+
+  let b: 50 | 20 = 20; // Restricts the values that this can receive to either only 50 or 20
+  console.log(b);
 }
 
 function duplicateStr(word: string, count: number): string {
