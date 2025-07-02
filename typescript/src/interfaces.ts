@@ -15,7 +15,7 @@ function interfaceMain() {
   console.log("Accounts array after adding: ", accounts);
 }
 
-function createAccount(name: string, isMale: boolean) {
+function createAccount(name: string, isMale: boolean): User {
   return { id: generateLatestId(), name, isMale };
 }
 
