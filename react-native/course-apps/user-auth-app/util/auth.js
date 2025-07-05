@@ -12,14 +12,15 @@ async function authenticate(mode, email, password) {
   });
 
   console.log(response.data);
+  return response.data.idToken;
 }
 
-export async function createUser(email, password) {
+export function createUser(email, password) {
   console.log("API_KEY:", API_KEY ? "Present" : "Missing");
   console.log("Request data:", { email, password: "***" });
 
   try {
-    authenticate("signUp", email, password);
+    return authenticate("signUp", email, password);
   } catch (error) {
     console.error("Full error object:", error);
     console.error("Error response:", error.response?.data);
@@ -38,6 +39,6 @@ export async function createUser(email, password) {
   }
 }
 
-export async function login(email, password) {
-  await authenticate("signInWithPassword", email, password);
+export function login(email, password) {
+  return authenticate("signInWithPassword", email, password);
 }
