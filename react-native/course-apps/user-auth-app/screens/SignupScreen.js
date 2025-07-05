@@ -7,7 +7,6 @@ function SignupScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   async function signUpHandler({ email, password }) {
-    console.log("called");
     setIsAuthenticating(true);
     await createUser(email, password);
     setIsAuthenticating(false);
