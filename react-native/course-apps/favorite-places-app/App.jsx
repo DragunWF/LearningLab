@@ -20,8 +20,8 @@ export default function App() {
           screenOptions={{
             headerStyle: {
               backgroundColor: Colors.primary500,
-              headerTintColor: Colors.gray700,
             },
+            headerTintColor: Colors.gray700,
             contentStyle: { backgroundColor: Colors.gray700 },
           }}
         >
@@ -34,7 +34,7 @@ export default function App() {
                 return (
                   <IconButton
                     icon="add"
-                    color={Colors.gray700}
+                    color={tintColor}
                     size={24}
                     onPress={() => {
                       navigation.navigate("AddPlace");
