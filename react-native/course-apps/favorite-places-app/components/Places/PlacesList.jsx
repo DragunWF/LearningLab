@@ -6,7 +6,7 @@ function PlacesList({ places }) {
     return (
       <View style={styles.fallbackContainer}>
         <Text style={styles.fallbackText}>
-          No places added yet. Start adding now bruh.
+          YOU HAVE NO FAVORITE PLACES. GO ADD ONE NOW SLAVE!
         </Text>
       </View>
     );
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   },
   fallbackText: {
     fontSize: 16,
+    textAlign: "center",
   },
 });
 
