@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 8,
-    marginLeft: -8,
     justifyContent: "center",
     alignItems: "center",
   },
