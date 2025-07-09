@@ -6,14 +6,15 @@ import {
   useRoute,
   useIsFocused,
 } from "@react-navigation/native";
-
-import OutlinedButton from "../ui/OutlinedButton";
-import { Colors } from "../../constants/colors";
 import {
   getCurrentPositionAsync,
   PermissionStatus,
   useForegroundPermissions,
 } from "expo-location";
+
+import OutlinedButton from "../ui/OutlinedButton";
+import { Colors } from "../../constants/colors";
+import { getAddress } from "../../util/location";
 
 function LocationPicker({ onPickLocation }) {
   const navigation = useNavigation();
@@ -35,7 +36,18 @@ function LocationPicker({ onPickLocation }) {
   }, [route, isFocused]);
 
   useEffect(() => {
-    onPickLocation(pickedLocation);
+    async function handleLocation() {
+      if (pickedLocation) {
+        const address = await getAddress(
+          pickedLocation.lat,
+          pickedLocation.lng
+        );
+        console.log(address);
+        onPickLocation({ ...pickedLocation, address });
+      }
+    }
+
+    handleLocation();
   }, [pickedLocation, onPickLocation]);
 
   async function verifyPermissions() {

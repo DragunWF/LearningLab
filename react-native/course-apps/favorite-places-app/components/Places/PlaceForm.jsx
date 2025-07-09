@@ -22,7 +22,9 @@ function PlaceForm() {
     setPickedLocation(location);
   }, []);
 
-  function savePlaceHandler() {}
+  function savePlaceHandler() {
+    console.log(pickedLocation);
+  }
 
   return (
     <ScrollView style={styles.form}>
