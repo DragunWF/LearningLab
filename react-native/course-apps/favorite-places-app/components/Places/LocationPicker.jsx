@@ -1,31 +1,31 @@
-import { StyleSheet, Alert, View, Text } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, Alert, Text } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import OutlinedButton from "../ui/OutlinedButton";
 import { Colors } from "../../constants/colors";
 import {
   getCurrentPositionAsync,
-  useForegroundPermissions,
   PermissionStatus,
+  useForegroundPermissions,
 } from "expo-location";
-
-import Map from "../../screens/Map";
-import OutlinedButton from "../ui/OutlinedButton";
 
 function LocationPicker() {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
+  const [pickedLocation, setPickedLocation] = useState(null);
 
   async function verifyPermissions() {
     if (
       locationPermissionInformation.status === PermissionStatus.UNDETERMINED
     ) {
       const permissionResponse = await requestPermission();
-
       return permissionResponse.granted;
     }
 
     if (locationPermissionInformation.status === PermissionStatus.DENIED) {
       Alert.alert(
         "Insufficient Permissions!",
-        "You need to grant location permissions for us to spy on you."
+        "You need to grant location permissions to use this app."
       );
       return false;
     }
@@ -35,20 +35,55 @@ function LocationPicker() {
 
   async function getLocationHandler() {
     const hasPermission = await verifyPermissions();
-    const location = await getCurrentPositionAsync();
 
     if (!hasPermission) {
       return;
     }
 
-    console.log(location);
+    try {
+      const location = await getCurrentPositionAsync();
+      setPickedLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+    } catch (err) {
+      Alert.alert(
+        "Could not fetch location!",
+        "Please try again later or pick a location on the map."
+      );
+    }
   }
 
-  function pickOnMapHandler() {}
+  function pickOnMapHandler() {
+    // You can implement navigation to a full-screen map here
+    // For now, we'll just log it
+    console.log("Pick on map pressed");
+  }
 
   return (
     <View>
-      <View style={styles.mapPreview}></View>
+      <View style={styles.mapPreview}>
+        {pickedLocation ? (
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: pickedLocation.lat,
+              longitude: pickedLocation.lng,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: pickedLocation.lat,
+                longitude: pickedLocation.lng,
+              }}
+            />
+          </MapView>
+        ) : (
+          <Text>No location chosen yet!</Text>
+        )}
+      </View>
       <View style={styles.actions}>
         <OutlinedButton icon="location" onPress={getLocationHandler}>
           Locate User
@@ -70,10 +105,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary100,
     borderRadius: 4,
+    overflow: "hidden",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
   },
 });
