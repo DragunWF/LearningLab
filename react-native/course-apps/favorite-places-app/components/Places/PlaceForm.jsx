@@ -5,7 +5,7 @@ import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import Button from "../ui/Button";
 
-function PlaceForm() {
+function PlaceForm({ onCreatePlace }) {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
@@ -23,6 +23,8 @@ function PlaceForm() {
   }, []);
 
   function savePlaceHandler() {
+    const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
+    onCreatePlace(placeData);
     console.log(pickedLocation);
   }
 
