@@ -8,7 +8,10 @@ export async function getAddress(lat, lng) {
     if (data.address) {
       console.log(data.address);
       const { road, house_number, postcode, town, country } = data.address;
-      const formattedAddress = `${road} ${house_number}, ${postcode} ${town}, ${country}`;
+      const addressItems = [road, house_number, postcode, town, country].filter(
+        (item) => item !== undefined
+      );
+      const formattedAddress = addressItems.join(", ");
       console.log("Address: ", formattedAddress);
 
       return formattedAddress;
