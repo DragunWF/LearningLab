@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { StyleSheet, View, Alert, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { useNavigation } from "@react-navigation/native";
+
 import OutlinedButton from "../ui/OutlinedButton";
 import { Colors } from "../../constants/colors";
 import {
@@ -10,6 +12,8 @@ import {
 } from "expo-location";
 
 function LocationPicker() {
+  const navigation = useNavigation();
+
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
   const [pickedLocation, setPickedLocation] = useState(null);
@@ -55,8 +59,7 @@ function LocationPicker() {
   }
 
   function pickOnMapHandler() {
-    // You can implement navigation to a full-screen map here
-    // For now, we'll just log it
+    navigation.navigate("Map");
     console.log("Pick on map pressed");
   }
 
