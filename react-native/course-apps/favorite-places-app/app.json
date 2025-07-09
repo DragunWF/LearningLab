@@ -31,6 +31,12 @@
         {
           "cameraPermission": "Hallo, we need access to your camera to spy on you."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
       ]
     ]
   }
