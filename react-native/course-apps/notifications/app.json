@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "notifications",
-    "slug": "notifications",
+    "slug": "notifications-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -39,6 +39,11 @@
           "enableBackgroundRemoteNotifications": false
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7b9e7315-2b04-4df8-af6d-67bbeeccaa38"
+      }
+    }
   }
 }

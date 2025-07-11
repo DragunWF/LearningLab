@@ -47,7 +47,7 @@ export default function App() {
       let finalStatus = status;
 
       if (finalStatus !== "granted") {
-        const { status } = Notifications.requestPermissionsAsync();
+        const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
 
@@ -59,7 +59,12 @@ export default function App() {
         return;
       }
 
-      const pushToken = await Notifications.getExpoPushTokenAsync();
+      console.log("Notification permissions granted!");
+      console.log("Project ID:", process.env.EXPO_PUBLIC_PROJECT_ID);
+
+      const pushToken = await Notifications.getExpoPushTokenAsync({
+        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+      });
       console.log("Expo Push Token:", pushToken);
 
       // required for android devices
@@ -128,16 +133,34 @@ export default function App() {
     });
   }
 
+  function sendPushNotificationHandler() {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: process.env.EXPO_PUBLIC_PUSH_TOKEN,
+        title: "Dragun (From a Device)",
+        body: "This is a test message!",
+      }),
+    });
+  }
+
   return (
     <>
       <StatusBar style="auto" />
       <View style={styles.container}>
         <Button
-          title="Press me to schedule a notification!"
+          title="Execute Local notification!"
           onPress={scheduleNotificationHandler}
         />
+        <Button
+          title="Execute Push notification!"
+          onPress={sendPushNotificationHandler}
+        />
         <View style={styles.infoContainer}>
-          <Text>Notifications Scheduled: {notificationScheduleCount}</Text>
+          <Text>Notifications Received: {notificationScheduleCount}</Text>
           <Text>Notification Responses: {notificationResponseCount}</Text>
         </View>
       </View>
