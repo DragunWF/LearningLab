@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import * as Notifications from "expo-notifications";
+import { useEffect } from "react";
 
 // This is where you can customize how notifications are handled
 // For example, you can set the default behavior for notifications
@@ -36,6 +37,21 @@ const requestPermissionsAsync = async () => {
 //// END ////
 
 export default function App() {
+  useEffect(() => {
+    // This is where you can handle notifications
+    const subscription = Notifications.addNotificationReceivedListener(
+      (response) => {
+        console.log("Notification received:", response);
+        // You can navigate to a specific screen or perform an action based on the notification response
+      }
+    );
+    console.log("Notification response listener added");
+    return () => {
+      // Clean up the subscription when the component unmounts
+      subscription.remove();
+    };
+  }, []);
+
   async function scheduleNotificationHandler() {
     const hasPushNotificationPermissionGranted =
       await allowsNotificationsAsync();
