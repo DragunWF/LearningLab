@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, Alert, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 
@@ -40,6 +40,41 @@ const requestPermissionsAsync = async () => {
 export default function App() {
   const [notificationScheduleCount, setNotificationScheduleCount] = useState(0);
   const [notificationResponseCount, setNotificationResponseCount] = useState(0);
+
+  useEffect(() => {
+    async function configurePushNotifications() {
+      const { status } = await Notifications.getPermissionsAsync();
+      let finalStatus = status;
+
+      if (finalStatus !== "granted") {
+        const { status } = Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        Alert.alert(
+          "Permission required",
+          "Push notifications need the approriate permissions!"
+        );
+        return;
+      }
+
+      const pushToken = await Notifications.getExpoPushTokenAsync();
+      console.log("Expo Push Token:", pushToken);
+
+      // required for android devices
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "default",
+          importance: Notifications.AndroidImportance.HIGH,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: "#FF231F7C",
+        });
+      }
+    }
+
+    configurePushNotifications();
+  }, []);
 
   useEffect(() => {
     // This is where you can handle notifications
