@@ -2,8 +2,48 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import * as Notifications from "expo-notifications";
 
+// This is where you can customize how notifications are handled
+// For example, you can set the default behavior for notifications
+// when the app is in the foreground or background.
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
+
+//// FOR IOS ////
+const allowsNotificationsAsync = async () => {
+  const settings = await Notifications.getPermissionsAsync();
+  return (
+    settings.granted ||
+    settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+  );
+};
+
+const requestPermissionsAsync = async () => {
+  return await Notifications.requestPermissionsAsync({
+    ios: {
+      allowAlert: true,
+      allowBadge: true,
+      allowSound: true,
+      allowAnnouncements: true,
+    },
+  });
+};
+//// END ////
+
 export default function App() {
-  function scheduleNotificationHandler() {
+  async function scheduleNotificationHandler() {
+    const hasPushNotificationPermissionGranted =
+      await allowsNotificationsAsync();
+
+    if (!hasPushNotificationPermissionGranted) {
+      await requestPermissionsAsync();
+    }
+
     Notifications.scheduleNotificationAsync({
       content: {
         title: "My first notification",
