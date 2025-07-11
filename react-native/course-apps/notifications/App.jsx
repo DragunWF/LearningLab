@@ -1,12 +1,36 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
+import * as Notifications from "expo-notifications";
 
 export default function App() {
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "My first notification",
+        body: "This is the body of the local notification",
+
+        // You can add additional data to the notification
+        data: { content: "This is some data" },
+        sound: "default", // Use 'default' for the default notification sound
+        priority: Notifications.AndroidNotificationPriority.HIGH, // Set high priority for Android
+        vibrate: true, // Enable vibration for the notification
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <>
       <StatusBar style="auto" />
-    </View>
+      <View style={styles.container}>
+        <Button
+          title="Press me to schedule notification!"
+          onPress={scheduleNotificationHandler}
+        />
+      </View>
+    </>
   );
 }
 
