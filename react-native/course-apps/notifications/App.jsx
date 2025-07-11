@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import * as Notifications from "expo-notifications";
@@ -37,18 +38,33 @@ const requestPermissionsAsync = async () => {
 //// END ////
 
 export default function App() {
+  const [notificationScheduleCount, setNotificationScheduleCount] = useState(0);
+  const [notificationResponseCount, setNotificationResponseCount] = useState(0);
+
   useEffect(() => {
     // This is where you can handle notifications
     const subscription = Notifications.addNotificationReceivedListener(
       (response) => {
         console.log("Notification received:", response);
+        setNotificationScheduleCount((prevCount) => prevCount + 1);
+        // Handle the notification here
         // You can navigate to a specific screen or perform an action based on the notification response
       }
     );
-    console.log("Notification response listener added");
+
+    const response = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("Notification response received:", response);
+        setNotificationResponseCount((prevCount) => prevCount + 1);
+        // Handle the notification response here
+        // For example, you can navigate to a specific screen based on the notification data
+      }
+    );
+
     return () => {
-      // Clean up the subscription when the component unmounts
+      // Clean up the subscription and response when the component unmounts
       subscription.remove();
+      response.remove();
     };
   }, []);
 
@@ -82,9 +98,13 @@ export default function App() {
       <StatusBar style="auto" />
       <View style={styles.container}>
         <Button
-          title="Press me to schedule notification!"
+          title="Press me to schedule a notification!"
           onPress={scheduleNotificationHandler}
         />
+        <View style={styles.infoContainer}>
+          <Text>Notifications Scheduled: {notificationScheduleCount}</Text>
+          <Text>Notification Responses: {notificationResponseCount}</Text>
+        </View>
       </View>
     </>
   );
@@ -94,6 +114,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  infoContainer: {
+    marginTop: 20,
+    gap: 10,
     alignItems: "center",
     justifyContent: "center",
   },
