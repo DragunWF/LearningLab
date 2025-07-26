@@ -1,7 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, StyleSheet, Text, Image, SafeAreaView } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import { generateGeminiInsights } from "./helpers/insightGenerator";
 
 export default function App() {
   // State to hold the selected image
@@ -9,6 +19,11 @@ export default function App() {
 
   // State to hold extracted text
   const [extractedText, setExtractedText] = useState("");
+  const [isExtractionLoading, setIsExtractionLoading] = useState(false);
+
+  // State to hold insights
+  const [insights, setInsights] = useState("");
+  const [isInsightsLoading, setIsInsightsLoading] = useState(false);
 
   // Function to pick an image from the
   // device's gallery
@@ -40,73 +55,112 @@ export default function App() {
     if (!result.canceled) {
       // Perform OCR on the captured image
       // Set the captured image in state
-      performOCR(result.assets[0]);
+      const extractedText = await performOCR(result.assets[0]);
       setImage(result.assets[0].uri);
+      await generateInsights(extractedText);
     }
   };
 
   // Function to perform OCR on an image
   // and extract text
-  const performOCR = (file) => {
-    let myHeaders = new Headers();
-    myHeaders.append(
-      "apikey",
+  const performOCR = async (file) => {
+    try {
+      setIsExtractionLoading(true);
 
-      // ADDD YOUR API KEY HERE
-      process.env.EXPO_PUBLIC_API_KEY
-    );
-    myHeaders.append("Content-Type", "multipart/form-data");
+      // Create FormData and append the image
+      const formData = new FormData();
+      formData.append("file", {
+        uri: file.uri,
+        type: "image/jpeg",
+        name: "image.jpg",
+      });
 
-    let raw = file;
-    let requestOptions = {
-      method: "POST",
-      redirect: "follow",
-      headers: myHeaders,
-      body: raw,
-    };
+      const response = await axios.post(
+        "https://api.apilayer.com/image_to_text/upload",
+        formData,
+        {
+          headers: {
+            apikey: process.env.EXPO_PUBLIC_OCR_API_KEY,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    // Send a POST request to the OCR API
-    fetch("https://api.apilayer.com/image_to_text/upload", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        // Set the extracted text in state
-        setExtractedText(result["all_text"]);
-      })
-      .catch((error) => console.log("error", error));
+      const text = response.data["all_text"];
+      // Set the extracted text in state
+      setExtractedText(text);
+      return text; // Return the text so it can be used immediately
+    } catch (error) {
+      console.log("error", error);
+      return ""; // Return empty string on error
+    } finally {
+      setIsExtractionLoading(false);
+    }
+  };
+
+  const generateInsights = async (text) => {
+    try {
+      setIsInsightsLoading(true);
+      const response = await generateGeminiInsights(text);
+      setInsights(response);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsInsightsLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.heading}>Welcome to GeeksforGeeks</Text>
-      <Text style={styles.heading2}>Image to Text App</Text>
-      <Button title="Pick an image from gallery" onPress={pickImageGallery} />
-      <Button title="Pick an image from camera" onPress={pickImageCamera} />
-      {image && (
-        <Image
-          source={{ uri: image }}
-          style={{
-            width: 400,
-            height: 300,
-            objectFit: "contain",
-          }}
-        />
-      )}
+    <ScrollView style={styles.rootContainer}>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.heading}>Welcome!</Text>
+        <Text style={styles.heading2}>Image to Text App</Text>
 
-      <Text style={styles.text1}>Extracted text:</Text>
-      <Text style={styles.text1}>{extractedText}</Text>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+        <Button title="Pick an image from gallery" onPress={pickImageGallery} />
+        <Button title="Pick an image from camera" onPress={pickImageCamera} />
+
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 400,
+              height: 300,
+              objectFit: "contain",
+            }}
+          />
+        )}
+
+        <Text style={styles.textBold}>Extracted text:</Text>
+        {isExtractionLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.text}>{extractedText}</Text>
+        )}
+
+        <Text style={styles.textBold}>Insights:</Text>
+        {isInsightsLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.text}>{insights}</Text>
+        )}
+
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
   container: {
-    display: "flex",
-    alignContent: "center",
+    flex: 1,
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     backgroundColor: "#fff",
-    height: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   heading: {
     fontSize: 28,
@@ -122,10 +176,14 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
-  text1: {
+  textBold: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "black",
+  },
+  text: {
     fontSize: 16,
     marginBottom: 10,
     color: "black",
-    fontWeight: "bold",
   },
 });
