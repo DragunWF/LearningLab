@@ -35,11 +35,24 @@ export default function App() {
       allowsMultipleSelection: false,
     });
     if (!result.canceled) {
-      // Perform OCR on the selected image
-      performOCR(result.assets[0]);
+      try {
+        // Perform OCR on the selected image
+        const extractedText = await performOCR(result.assets[0]);
+        // Set the selected image in state
+        setImage(result.assets[0].uri);
+        console.log("Extracted Text:", extractedText);
 
-      // Set the selected image in state
-      setImage(result.assets[0].uri);
+        // Only generate insights if OCR was successful and we have text
+        if (extractedText && extractedText.trim()) {
+          await generateInsights(extractedText);
+        } else {
+          console.log("No text extracted, skipping insights generation");
+        }
+      } catch (error) {
+        console.log("Error in pickImageGallery:", error);
+        // Still set the image even if OCR fails
+        setImage(result.assets[0].uri);
+      }
     }
   };
 
@@ -53,11 +66,24 @@ export default function App() {
       allowsMultipleSelection: false,
     });
     if (!result.canceled) {
-      // Perform OCR on the captured image
-      // Set the captured image in state
-      const extractedText = await performOCR(result.assets[0]);
-      setImage(result.assets[0].uri);
-      await generateInsights(extractedText);
+      try {
+        // Perform OCR on the captured image
+        const extractedText = await performOCR(result.assets[0]);
+        // Set the captured image in state
+        setImage(result.assets[0].uri);
+        console.log("Extracted Text:", extractedText);
+
+        // Only generate insights if OCR was successful and we have text
+        if (extractedText && extractedText.trim()) {
+          await generateInsights(extractedText);
+        } else {
+          console.log("No text extracted, skipping insights generation");
+        }
+      } catch (error) {
+        console.log("Error in pickImageCamera:", error);
+        // Still set the image even if OCR fails
+        setImage(result.assets[0].uri);
+      }
     }
   };
 
@@ -66,33 +92,35 @@ export default function App() {
   const performOCR = async (file) => {
     try {
       setIsExtractionLoading(true);
+      const myHeaders = new Headers();
+      myHeaders.append("apikey", process.env.EXPO_PUBLIC_OCR_API_KEY);
+      myHeaders.append("Content-Type", "multipart/form-data");
 
-      // Create FormData and append the image
-      const formData = new FormData();
-      formData.append("file", {
-        uri: file.uri,
-        type: "image/jpeg",
-        name: "image.jpg",
-      });
+      const requestOptions = {
+        method: "POST",
+        redirect: "follow",
+        headers: myHeaders,
+        body: file,
+      };
 
-      const response = await axios.post(
+      // Send a POST request to the OCR API
+      const response = await fetch(
         "https://api.apilayer.com/image_to_text/upload",
-        formData,
-        {
-          headers: {
-            apikey: process.env.EXPO_PUBLIC_OCR_API_KEY,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        requestOptions
       );
 
-      const text = response.data["all_text"];
-      // Set the extracted text in state
-      setExtractedText(text);
-      return text; // Return the text so it can be used immediately
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      console.log(result["all_text"]);
+      setExtractedText(result["all_text"]);
+      return result["all_text"];
     } catch (error) {
-      console.log("error", error);
-      return ""; // Return empty string on error
+      console.log("OCR Error:", error);
+      throw error; // Re-throw the error so the caller can handle it
     } finally {
       setIsExtractionLoading(false);
     }
@@ -100,6 +128,7 @@ export default function App() {
 
   const generateInsights = async (text) => {
     try {
+      console.log("Generating insights...");
       setIsInsightsLoading(true);
       const response = await generateGeminiInsights(text);
       setInsights(response);
@@ -107,6 +136,7 @@ export default function App() {
       console.log("error", error);
     } finally {
       setIsInsightsLoading(false);
+      console.log("Finished generating insights...");
     }
   };
 
