@@ -4,8 +4,8 @@ import { createContext, useEffect, useState } from "react";
 export const AuthContext = createContext({
   token: "",
   isAuthenticated: false,
-  authenticate: () => {},
-  logout: () => {},
+  authenticate: () => { },
+  logout: () => { },
 });
 
 function AuthContextProvider({ children }) {
