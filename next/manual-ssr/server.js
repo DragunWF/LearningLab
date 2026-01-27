@@ -66,6 +66,7 @@ function MenuItem({ pizza }) {
 }
 
 const htmlTemplate = readFileSync(`${__dirname}/index.html`, "utf-8");
+const clientJS = readFileSync(`${__dirname}/client.js`, "utf-8");
 
 const server = createServer((req, res) => {
   const parsedUrl = parse(req.url, true).pathname;
@@ -87,11 +88,17 @@ const server = createServer((req, res) => {
     );
   } else if (parsedUrl === "/dragunwf") {
     res.end("DragunWF");
-  } else if (parsedUrl === "/pizza") {
-    const renderedHtml = renderToString(<Home />);
-    const html = htmlTemplate.replace("%%%CONTENT%%%", renderedHtml);
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(html);
+    } else if (parsedUrl === "/pizza") {
+      const renderedHtml = renderToString(<Home />);
+      const html = htmlTemplate.replace(
+        "%%%CONTENT%%%",
+        `<div id="root">${renderedHtml}</div>`
+      );
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(html);
+    } else if (parsedUrl === "/client.js") {
+    res.writeHead(200, { "Content-Type": "application/javascript" });
+    res.end(clientJS);
   } else {
     res.end("Unknown route");
   }
