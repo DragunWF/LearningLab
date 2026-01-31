@@ -16,7 +16,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // Notes: Amount of time that the data is fresh before it is refreched in the cache
-      staleTime: 1000 * 60,
+      // staleTime: 1000 * 60,
+      staleTime: 0,
     },
   },
 });
