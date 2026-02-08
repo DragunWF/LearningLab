@@ -2,8 +2,12 @@ import Logo from "./_components/Logo";
 import Navigation from "./_components/navigation";
 
 export const metadata = {
-  title: "The Wild Oasis",
-  description: "Created as a project by DragunWF to learn Next.js",
+  title: {
+    template: "%s | The Wild Oasis",
+    default: "Welcome | The Wild Oasis",
+  },
+  description:
+    "Luxurious cabiun hotel, located in the heart of the Philippines. Experience the perfect blend of nature and comfort with our stunning cabins, exceptional service, and unforgettable experiences.",
 };
 
 export default function RootLayout({ children }) {
