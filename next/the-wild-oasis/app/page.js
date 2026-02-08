@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import "@/app/_styles/globals.css";
+
 export default function Page() {
   return (
     <div>
