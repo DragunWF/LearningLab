@@ -2,8 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import bg from "@/public/bg.png";
 
-import "@/app/_styles/globals.css";
-
 export default function Page() {
   return (
     <main className="mt-24">
