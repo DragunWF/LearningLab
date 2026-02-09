@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 export default function Navigation() {
   return (
     <nav className="z-10 text-xl">
