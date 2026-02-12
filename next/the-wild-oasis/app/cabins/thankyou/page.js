@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Page() {
   return (
     <div className="text-center space-y-6 mt-4">
