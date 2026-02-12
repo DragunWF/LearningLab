@@ -1,7 +1,11 @@
-export default function Page() {
-  // CHANGE
-  const reservationId = 23;
-  const maxCapacity = 23;
+import { updateReservation } from "@/app/_lib/actions";
+import { getBooking } from "@/app/_lib/data-service";
+
+export default async function Page({ params }) {
+  const booking = await getBooking(params.bookingId);
+  const reservationId = booking.id;
+  const maxCapacity = booking.numGuests;
+  const observations = booking.observations;
 
   return (
     <div>
@@ -9,7 +13,10 @@ export default function Page() {
         Edit Reservation #{reservationId}
       </h2>
 
-      <form className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col">
+      <form
+        action={updateReservation.bind(null, reservationId)}
+        className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"
+      >
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
@@ -18,7 +25,7 @@ export default function Page() {
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
             required
           >
-            <option value="" key="">
+            <option value={maxCapacity} key="">
               Select number of guests...
             </option>
             {Array.from({ length: maxCapacity }, (_, i) => i + 1).map((x) => (
@@ -35,6 +42,7 @@ export default function Page() {
           </label>
           <textarea
             name="observations"
+            defaultValue={observations}
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
           />
         </div>
