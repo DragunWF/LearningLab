@@ -148,6 +148,7 @@ CLASS todo_list IMPLEMENTATION.
       r_success = abap_false.
       RETURN.
     ENDIF.
+    r_success = abap_true.
   ENDMETHOD.
 
   METHOD update_task.
