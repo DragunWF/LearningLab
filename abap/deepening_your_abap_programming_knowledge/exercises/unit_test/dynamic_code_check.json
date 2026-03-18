@@ -1,0 +1,29 @@
+{
+  "checkName": "ABAP_UNIT",
+  "parameters": [
+    {
+      "name": "MaximumRiskLevel",
+      "value": "11"
+    },
+    {
+      "name": "MaximumRuntimeCategory",
+      "value": "12"
+    },
+    {
+      "name": "RuntimeRestriction",
+      "value": "2"
+    },
+    {
+      "name": "DurationLong",
+      "value": "3600"
+    },
+    {
+      "name": "DurationMedium",
+      "value": "300"
+    },
+    {
+      "name": "DurationShort",
+      "value": "60"
+    }
+  ]
+}
