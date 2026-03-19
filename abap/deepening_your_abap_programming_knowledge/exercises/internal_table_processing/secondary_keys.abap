@@ -1,0 +1,110 @@
+* ============================================================
+* ==============================
+* GLOBAL CLASSES
+* ==============================
+* ============================================================
+
+CLASS z8141_secondary_keys DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    INTERFACES if_oo_adt_classrun .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z8141_secondary_keys IMPLEMENTATION.
+
+
+  METHOD if_oo_adt_classrun~main.
+
+
+    DATA(object) = NEW lcl_flights( ).
+
+
+* object->read_primary( ).
+    object->read_non_key( ).
+    object->read_secondary_1( ).
+    object->read_secondary_2( ).
+    object->read_secondary_3( ).
+
+
+    out->write( 'Done' ).
+
+
+
+  ENDMETHOD.
+ENDCLASS.
+
+* ============================================================
+* ==============================
+* LOCAL CLASSES
+* ==============================
+* ============================================================
+
+CLASS lcl_flights DEFINITION.
+  PUBLIC SECTION.
+    METHODS constructor.
+    METHODS read_primary.
+    METHODS read_non_key.
+    METHODS read_secondary_1.
+    METHODS read_secondary_2.
+    METHODS read_secondary_3.
+
+
+  PRIVATE SECTION.
+    DATA connections TYPE SORTED TABLE OF Zs4d401_flights WITH NON-UNIQUE KEY carrier_id connection_Id flight_date.
+    DATA connections_sk TYPE SORTED TABLE OF Zs4d401_flights WITH NON-UNIQUE KEY carrier_id connection_id flight_date
+    WITH NON-UNIQUE SORTED KEY k_plane COMPONENTS plane_type_id.
+
+
+ENDCLASS.
+
+
+CLASS lcl_flights IMPLEMENTATION.
+
+
+  METHOD constructor.
+    SELECT FROM Zs4d401_flights FIELDS * INTO TABLE @connections.
+    SELECT FROM Zs4d401_flights FIELDS * INTO TABLE @connections_sk.
+  ENDMETHOD.
+
+
+  METHOD read_non_key.
+    LOOP AT connections INTO DATA(connection) WHERE plane_type_id = '737-800'.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD read_primary.
+    DATA count TYPE i VALUE 1.
+    LOOP AT connections INTO DATA(connection) WHERE carrier_id = 'LH' AND connection_id = '0405' .
+      count += 1.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD read_secondary_1.
+    LOOP AT connections_sk INTO DATA(connection) USING KEY k_plane WHERE plane_type_id = '737-800'.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD read_secondary_2.
+    LOOP AT connections_sk INTO DATA(connection) USING KEY k_plane WHERE plane_type_id = '737-800'.
+    ENDLOOP.
+  ENDMETHOD.
+  METHOD read_secondary_3.
+    LOOP AT connections_sk INTO DATA(connection) USING KEY k_plane WHERE plane_type_id = '737-800'.
+    ENDLOOP.
+
+
+  ENDMETHOD.
+
+
+ENDCLASS.
