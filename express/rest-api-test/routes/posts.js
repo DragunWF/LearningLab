@@ -18,13 +18,16 @@ router.get("/", logger, (req, res) => {
   }
 });
 
-router.get("/:id", logger, (req, res) => {
+router.get("/:id", logger, (req, res, next) => {
   const { id } = req.params;
   const post = posts.find((post) => post.id === Number(id));
+
   if (post) {
     res.status(200).json(post);
   } else {
-    res.status(404).json({ message: "Post not found" });
+    const error = new Error(`A post with ID of ${id} does not exist!`);
+    error.status = 404;
+    return next(error);
   }
 });
 
