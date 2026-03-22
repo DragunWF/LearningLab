@@ -1,4 +1,5 @@
 import express from "express";
+import logger from "../middleware/logger.js";
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ let posts = [
   { id: 3, title: "The Lean Startup" },
 ];
 
-router.get("/", (req, res) => {
+router.get("/", logger, (req, res) => {
   const limit = parseInt(req.query.limit);
   if (!isNaN(limit) && limit > 0) {
     res.status(200).json(posts.splice(0, limit));
@@ -17,7 +18,7 @@ router.get("/", (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", logger, (req, res) => {
   const { id } = req.params;
   const post = posts.find((post) => post.id === Number(id));
   if (post) {
@@ -27,7 +28,7 @@ router.get("/:id", (req, res) => {
   }
 });
 
-router.post("/create", (req, res) => {
+router.post("/create", logger, (req, res) => {
   const { title } = req.body;
   if (!title) {
     return res.status(400).json({ message: "Title is required" });
@@ -37,7 +38,7 @@ router.post("/create", (req, res) => {
   res.status(201).json(newPost);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", logger, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
   if (!title) {
@@ -52,7 +53,7 @@ router.put("/:id", (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", logger, (req, res) => {
   const { id } = req.params;
   const post = posts.find((post) => post.id === Number(id));
   if (post) {
