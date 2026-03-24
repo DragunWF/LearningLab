@@ -1,0 +1,23 @@
+{
+  "name": "inngest-chapter-02",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "inngest": "npx inngest-cli@latest dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "inngest": "^4.0.5",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
