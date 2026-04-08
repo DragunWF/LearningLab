@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: "Roboto Mono, monospace",
+    },
+    extend: {
+      colors: {
+        pizza: "#123456",
+      },
+    },
   },
   plugins: [],
 };
