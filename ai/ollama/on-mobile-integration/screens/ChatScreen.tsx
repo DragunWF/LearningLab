@@ -3,6 +3,7 @@ import { View, FlatList, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaVie
 import { Message } from '../types/chat';
 import MessageBubble from '../components/MessageBubble';
 import ChatInput from '../components/ChatInput';
+import { generateAIResponse } from '../services/ollamaService';
 
 export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
@@ -16,7 +17,7 @@ export default function ChatScreen() {
   const [isAiLoading, setIsAiLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
-  const handleSend = (text: string) => {
+  const handleSend = async (text: string) => {
     const newUserMessage: Message = {
       id: Date.now().toString(),
       text,
@@ -24,20 +25,20 @@ export default function ChatScreen() {
       timestamp: Date.now(),
     };
 
-    setMessages(prev => [...prev, newUserMessage]);
+    const updatedMessages = [...messages, newUserMessage];
+    setMessages(updatedMessages);
     setIsAiLoading(true);
 
-    // Simulate AI response delay
-    setTimeout(() => {
-      const newAiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'This is a simulated AI response. The actual AI is not yet integrated.',
-        sender: 'ai',
-        timestamp: Date.now(),
-      };
-      setMessages(prev => [...prev, newAiMessage]);
-      setIsAiLoading(false);
-    }, 1500);
+    const aiResponseText = await generateAIResponse(updatedMessages);
+
+    const newAiMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      text: aiResponseText,
+      sender: 'ai',
+      timestamp: Date.now(),
+    };
+    setMessages(prev => [...prev, newAiMessage]);
+    setIsAiLoading(false);
   };
 
   return (
