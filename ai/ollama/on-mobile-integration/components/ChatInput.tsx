@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 
 interface Props {
   onSend: (text: string) => void;
@@ -7,12 +14,12 @@ interface Props {
 }
 
 export default function ChatInput({ onSend, isSending = false }: Props) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const handleSend = () => {
     if (text.trim().length > 0 && !isSending) {
       onSend(text.trim());
-      setText('');
+      setText("");
     }
   };
 
@@ -27,8 +34,11 @@ export default function ChatInput({ onSend, isSending = false }: Props) {
         maxLength={500}
         editable={!isSending}
       />
-      <TouchableOpacity 
-        style={[styles.sendButton, (!text.trim() || isSending) && styles.sendButtonDisabled]} 
+      <TouchableOpacity
+        style={[
+          styles.sendButton,
+          (!text.trim() || isSending) && styles.sendButtonDisabled,
+        ]}
         onPress={handleSend}
         disabled={!text.trim() || isSending}
       >
@@ -44,18 +54,18 @@ export default function ChatInput({ onSend, isSending = false }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 10,
-    alignItems: 'flex-end',
-    backgroundColor: '#fff',
+    alignItems: "flex-end",
+    backgroundColor: "#fff",
     borderTopWidth: 1,
-    borderColor: '#e5e5ea',
+    borderColor: "#e5e5ea",
   },
   input: {
     flex: 1,
     minHeight: 40,
     maxHeight: 120,
-    backgroundColor: '#f2f2f7',
+    backgroundColor: "#f2f2f7",
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingTop: 10,
@@ -64,19 +74,19 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   sendButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     borderRadius: 20,
     height: 40,
     paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   sendButtonDisabled: {
-    backgroundColor: '#A1C6EA',
+    backgroundColor: "#A1C6EA",
   },
   sendText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
