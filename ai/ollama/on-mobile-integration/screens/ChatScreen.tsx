@@ -1,27 +1,52 @@
-import React, { useState, useRef } from 'react';
-import { View, FlatList, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaView, ActivityIndicator, Text } from 'react-native';
-import { Message } from '../types/chat';
-import MessageBubble from '../components/MessageBubble';
-import ChatInput from '../components/ChatInput';
-import { generateAIResponse } from '../services/ollamaService';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ActivityIndicator,
+  Text,
+} from "react-native";
+import { Message } from "../types/chat";
+import MessageBubble from "../components/MessageBubble";
+import ChatInput from "../components/ChatInput";
+import {
+  generateAIResponse,
+  USE_ON_DEVICE_AI,
+} from "../services/ollamaService";
+import { initMLC } from "../services/mlcService";
 
 export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      text: 'Hello! I am ready to answer your questions once my AI is integrated.',
-      sender: 'ai',
+      id: "1",
+      text: "Hello! I am ready to answer your questions.",
+      sender: "ai",
       timestamp: Date.now(),
-    }
+    },
   ]);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
   const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    if (USE_ON_DEVICE_AI) {
+      initMLC((progress) => {
+        setDownloadProgress(progress);
+      }).catch((err) => {
+        console.error("Initialization failed:", err);
+        setDownloadProgress(null);
+      });
+    }
+  }, []);
 
   const handleSend = async (text: string) => {
     const newUserMessage: Message = {
       id: Date.now().toString(),
       text,
-      sender: 'user',
+      sender: "user",
       timestamp: Date.now(),
     };
 
@@ -34,26 +59,36 @@ export default function ChatScreen() {
     const newAiMessage: Message = {
       id: (Date.now() + 1).toString(),
       text: aiResponseText,
-      sender: 'ai',
+      sender: "ai",
       timestamp: Date.now(),
     };
-    setMessages(prev => [...prev, newAiMessage]);
+    setMessages((prev) => [...prev, newAiMessage]);
     setIsAiLoading(false);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView 
-        style={styles.container} 
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        {downloadProgress !== null && downloadProgress < 1 && (
+          <View style={styles.downloadContainer}>
+            <ActivityIndicator size="small" color="#007AFF" />
+            <Text style={styles.downloadText}>
+              Preparing MLC Model: {Math.round(downloadProgress * 100)}%
+            </Text>
+          </View>
+        )}
         <FlatList
           ref={flatListRef}
           data={messages}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <MessageBubble message={item} />}
           contentContainerStyle={styles.listContent}
-          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
           onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
           ListFooterComponent={
             isAiLoading ? (
@@ -73,10 +108,24 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,
+  },
+  downloadContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+    backgroundColor: "#E5F1FF",
+    borderBottomWidth: 1,
+    borderColor: "#B3D4FF",
+  },
+  downloadText: {
+    marginLeft: 10,
+    color: "#0056B3",
+    fontWeight: "600",
   },
   listContent: {
     paddingHorizontal: 16,
@@ -84,14 +133,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   loadingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
   loadingText: {
     marginLeft: 8,
-    color: '#666',
+    color: "#666",
     fontSize: 14,
   },
 });
