@@ -1,4 +1,4 @@
-import { mlc } from "@react-native-ai/mlc";
+import { mlc, MLCEngine } from "@react-native-ai/mlc";
 import { generateText } from "ai";
 import { Message } from "../types/chat";
 
@@ -7,7 +7,7 @@ import { Message } from "../types/chat";
  * Note: MLC uses differently compiled models from GGUF. You must use a pre-compiled
  * model available via the MLC ecosystem.
  */
-const MLC_MODEL_NAME = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+const MLC_MODEL_NAME = "Qwen2-1.5B-Instruct";
 
 // Hold the active model binding
 let mlcModel: ReturnType<typeof mlc.languageModel> | null = null;
