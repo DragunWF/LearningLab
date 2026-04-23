@@ -89,14 +89,11 @@ ENDCLASS.
 CLASS lcl_connection IMPLEMENTATION.
 
   METHOD constructor.
-    TRY.
-        me->set_attributes(
-            i_carrier_id = i_carrier_id
-            i_connection_id = i_connection_id
-        ).
-        lcl_connection=>conn_counter += 1.
-      CATCH cx_abap_invalid_value.
-    ENDTRY.
+    me->set_attributes(
+         i_carrier_id = i_carrier_id
+         i_connection_id = i_connection_id
+     ).
+    lcl_connection=>conn_counter += 1.
   ENDMETHOD.
 
   METHOD get_output.
