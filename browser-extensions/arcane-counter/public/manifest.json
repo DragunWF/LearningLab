@@ -9,7 +9,12 @@
     "default_title": "Open Arcane Counter"
   },
   "background": {
-    "service_worker": "background.js",
+    "scripts": ["background.js"],
     "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "arcane-counter@learninglab.local"
+    }
   }
 }
