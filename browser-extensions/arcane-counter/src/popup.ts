@@ -1,9 +1,8 @@
+import browser from "webextension-polyfill";
+
 /**
- * POPUP LOGIC
- *
- * The Popup is transient—it is destroyed when closed. Therefore, it should never
- * hold the primary state. Instead, it acts as a "View" that communicates with the
- * "Controller" (Background Script) via message passing.
+ * ARCANE COUNTER - POPUP
+ * This script handles the UI and communicates with the background script.
  */
 
 const counterDisplay = document.getElementById(
@@ -12,50 +11,53 @@ const counterDisplay = document.getElementById(
 const incrementBtn = document.getElementById(
   "increment-btn",
 ) as HTMLButtonElement;
+const statusText = document.querySelector(".status-text") as HTMLDivElement;
 
 /**
- * INITIALIZATION
- * When the popup opens, we immediately ask the background script for the
- * current count to ensure the UI is in sync.
+ * ENVIRONMENT CHECK
+ * Helps the user understand if they are running in the correct context.
  */
-async function init() {
-  console.log("[Popup] Initializing...");
+const isExtension = !!(browser.runtime && browser.runtime.id);
 
-  // chrome.runtime.sendMessage is the primary way to talk to the background script.
-  // It returns a Promise in Manifest V3 (Chrome 99+).
+if (!isExtension) {
+  statusText.innerText = "⚠️ Running as Website (APIs Disabled)";
+  statusText.style.color = "#fbbf24";
+  console.warn("[Arcane] Extension APIs are unavailable in a standard tab.");
+}
+
+async function init() {
+  if (!isExtension) return;
+
   try {
-    const response = await chrome.runtime.sendMessage({ type: "GET_COUNT" });
+    // webextension-polyfill makes everything return Promises, even in Chrome!
+    const response = await browser.runtime.sendMessage({ type: "GET_COUNT" });
     updateDisplay(response.count);
+    statusText.innerText = "Aether Connected";
   } catch (error) {
-    console.error("[Popup] Failed to fetch count:", error);
+    console.error("[Arcane] Initialization failed:", error);
+    statusText.innerText = "Connection Failed";
   }
 }
 
-/**
- * UI UPDATER
- * Keeps the DOM manipulation logic separate from communication logic.
- */
 function updateDisplay(count: number) {
   counterDisplay.innerText = count.toString();
 }
 
-/**
- * EVENT LISTENERS
- * When the user interacts, we don't increment locally. We send a command
- * to the background script so the change is persisted across sessions.
- */
 incrementBtn.addEventListener("click", async () => {
-  console.log("[Popup] Increment requested");
+  if (!isExtension) {
+    alert(
+      "Summoning requires an Extension Context. Please load the 'dist' folder into Firefox.",
+    );
+    return;
+  }
 
   try {
-    // We send an 'INCREMENT' action to the background.
-    // The background handles the logic and returns the new value.
-    const response = await chrome.runtime.sendMessage({ type: "INCREMENT" });
+    const response = await browser.runtime.sendMessage({ type: "INCREMENT" });
     updateDisplay(response.count);
   } catch (error) {
-    console.error("[Popup] Failed to increment count:", error);
+    console.error("[Arcane] Increment failed:", error);
   }
 });
 
-// Start the initialization
+// Start the sequence
 init();

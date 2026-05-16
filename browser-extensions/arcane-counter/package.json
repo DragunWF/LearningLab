@@ -9,8 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^25.8.0",
+    "@types/webextension-polyfill": "^0.10.7",
     "typescript": "^5.2.2",
-    "vite": "^5.0.0",
-    "@types/chrome": "^0.0.268"
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.12.0"
   }
 }

@@ -1,57 +1,38 @@
-/**
- * BACKGROUND SCRIPT (Service Worker)
- *
- * In Manifest V3, the background script is a Service Worker. It is event-driven
- * and stays idle when not in use. It is the single source of truth for state.
- */
-
-// Key used for persistent storage
+import browser from 'webextension-polyfill';
 import { STORAGE_KEY } from "./constants";
 
 /**
- * MESSAGE LISTENER
- * This is the central hub for handling requests from other parts of the extension (like the popup).
- * 'sendResponse' is used to return data back to the sender.
+ * ARCANE COUNTER - BACKGROUND
+ * The Source of Truth for the extension.
  */
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+
+browser.runtime.onMessage.addListener(async (message) => {
   console.log("[Background] Message received:", message);
 
   if (message.type === "GET_COUNT") {
-    // We retrieve the count from persistent storage.
-    // chrome.storage.local is asynchronous.
-    chrome.storage.local.get([STORAGE_KEY], (result) => {
-      const count = result[STORAGE_KEY] || 0;
-      sendResponse({ count });
-    });
-    // CRITICAL: return true to indicate you want to send a response asynchronously.
-    return true;
+    const result = await browser.storage.local.get([STORAGE_KEY]);
+    return { count: result[STORAGE_KEY] || 0 };
   }
 
   if (message.type === "INCREMENT") {
-    chrome.storage.local.get([STORAGE_KEY], (result) => {
-      const currentCount = result[STORAGE_KEY] || 0;
-      const newCount = currentCount + 1;
-
-      // Persist the new value
-      chrome.storage.local.set({ [STORAGE_KEY]: newCount }, () => {
-        console.log("[Background] Counter incremented to:", newCount);
-        sendResponse({ count: newCount });
-      });
-    });
-    return true;
+    const result = await browser.storage.local.get([STORAGE_KEY]);
+    const newCount = (result[STORAGE_KEY] || 0) + 1;
+    
+    await browser.storage.local.set({ [STORAGE_KEY]: newCount });
+    console.log("[Background] New Count:", newCount);
+    
+    return { count: newCount };
   }
+  
+  return false;
 });
 
-/**
- * LIFECYCLE EVENT: onInstalled
- * Runs once when the extension is first installed or updated.
- * Good for initializing default state.
- */
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("[Background] Arcane Counter Installed.");
-  chrome.storage.local.get([STORAGE_KEY], (result) => {
+// Initialize storage on installation
+browser.runtime.onInstalled.addListener(() => {
+  console.log("[Background] Extension Installed.");
+  browser.storage.local.get([STORAGE_KEY]).then((result) => {
     if (result[STORAGE_KEY] === undefined) {
-      chrome.storage.local.set({ [STORAGE_KEY]: 0 });
+      browser.storage.local.set({ [STORAGE_KEY]: 0 });
     }
   });
 });
