@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Arcane Counter (Learn)",
+  "version": "1.0.0",
+  "description": "An arcane-themed persistent counter demonstration.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open Arcane Counter"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
