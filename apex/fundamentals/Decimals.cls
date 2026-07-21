@@ -1,0 +1,1 @@
+Decimal contractValue = 3200.99;

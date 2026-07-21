@@ -1,0 +1,1 @@
+String opportunityStage = 'Stage 0 - Doesn\'t Qualify';

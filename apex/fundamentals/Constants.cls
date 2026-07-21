@@ -1,0 +1,1 @@
+final String STAGE_CLOSED_WON = 'Closed - Won';
